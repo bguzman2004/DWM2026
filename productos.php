@@ -12,7 +12,9 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="index.php">Logo</a>
+                <a class="navbar-brand" href="index.php">
+                    <img src="img/logo.jpg" alt="Logo" height="60">
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -56,13 +58,13 @@
                 <!-- The slideshow/carousel -->
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                    <img src="img/la.jpg" alt="Los Angeles" class="d-block w-100">
+                    <img src="img/equipo.jpeg" alt="Nuestro Equipo" class="d-block w-100">
                     </div>
                     <div class="carousel-item">
-                    <img src="img/chicago.jpg" alt="Chicago" class="d-block w-100">
+                    <img src="img/mano.jpeg" alt="Mano" class="d-block w-100">
                     </div>
                     <div class="carousel-item">
-                    <img src="img/ny.jpg" alt="New York" class="d-block w-100">
+                    <img src="img/tablet.jpeg" alt="New York" class="d-block w-100">
                     </div>
                 </div>
 
@@ -80,7 +82,7 @@
             <div class="row">
                 <div class="col-4"></div>
                 <div class="col-4 d-flex justify-content-center" 
-                style="color:white"><strong>MiEmpresa@2026</strong></div>
+                style="color:white"><strong>© 2026 INFORMATICS                         Creado por M.CAETEMORA × B.GZMN</strong></div>
                 <div class="col-4"></div>
             </div>
         </div>
@@ -98,24 +100,24 @@
                     <div class="modal-body">
                         <form action="empresa.php">
                             <div class="mb-2 mt-2">
-                                <label for="email" class="form-label">Email:</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                                <label for="email" class="form-label">Correo:</label>
+                                <input type="email" class="form-control" id="email" placeholder="Ingresar Correo" name="email">
                             </div>
                             <div class="mb-2">
-                                <label for="pwd" class="form-label">Password:</label>
-                                <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
+                                <label for="pwd" class="form-label">Contraseña:</label>
+                                <input type="password" class="form-control" id="pwd" placeholder="Ingresar Contraseña" name="pswd">
                             </div>
                             <div class="form-check mb-2">
                                 <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="remember"> Remember me
+                                <input class="form-check-input" type="checkbox" name="Recordarme"> Recordarme
                                 </label>
                             </div>
-                            <button type="submit" class="btn btn-primary">Login  <i class="fa fa-check-circle"></i></button>
+                            <button type="submit" class="btn btn-primary">Ingresar  <i class="fa fa-check-circle"></i></button>
                         </form>
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>
