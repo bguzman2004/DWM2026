@@ -10,7 +10,7 @@
     </head>
     <body>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <nav class="navbar navbar-expand-sm bg-white navbar-light shadow-sm border-bottom">
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.php">
                     <img src="img/logo.jpg" alt="Logo" height="60">
@@ -21,7 +21,7 @@
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Empresa</a>
+                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown">Empresa</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="empresa.php">Nuestro Empresa</a></li>
                                 <li><a class="dropdown-item" href="#">Nuestro Equipo</a></li>
@@ -29,13 +29,13 @@
                             </ul>
                         </li>                        
                         <li class="nav-item">
-                            <a class="nav-link" href="productos.php">Productos</a>
+                            <a class="nav-link text-dark" href="productos.php">Productos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="servicios.php">Servicios</a>
+                            <a class="nav-link text-dark" href="servicios.php">Servicios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="contacto.php">Contacto</a>
+                            <a class="nav-link text-dark" href="contacto.php">Contacto</a>
                         </li>
                     </ul>
                 </div>
@@ -43,39 +43,91 @@
             </div>
         </nav>
 
-        <!-- Container -->
-        <div class="container-fluid bg-warning">
-            <div class="container"></div>
-                <div id="demo" class="carousel slide" data-bs-ride="carousel">
+        <!-- Hero Servicios -->
+        <div class="container-fluid bg-light py-5">
+            <div class="container text-center">
+                <h1 class="fw-bold display-5">SERVICIOS</h1>
+                <p class="fs-4 text-secondary mb-3">Soluciones informáticas para tus necesidades.</p>
+                <p class="fs-5 mx-auto" style="max-width: 700px;">En <strong>INFORMATICS</strong> desarrollamos soluciones tecnológicas adaptadas a cada proyecto, combinando ingeniería informática, desarrollo de software, datos e infraestructura TI.</p>
+            </div>
+        </div>
 
-                <!-- Indicators/dots -->
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
-                    <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
-                    <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
-                </div>
+        <!-- Nuestros servicios: carrusel de tarjetas -->
+        <div class="container my-5">
+            <h2 class="fw-bold text-center mb-5">Nuestros servicios</h2>
 
-                <!-- The slideshow/carousel -->
+            <div id="serviciosCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
+
                     <div class="carousel-item active">
-                    <img src="img/equipo.jpeg" alt="Nuestro Equipo" class="d-block w-100">
+                        <div class="d-flex justify-content-center">
+                            <div class="card border-0 shadow-sm p-4" style="max-width: 500px;">
+                                <span class="text-primary fw-bold fs-6">01 —</span>
+                                <h3 class="fw-bold">Desarrollo Web</h3>
+                                <p class="fs-5 text-secondary">Creamos páginas web modernas, rápidas y adaptadas a computadores, tablets y celulares.</p>
+                                <a href="#" class="text-primary fw-semibold text-decoration-none">Ver más →</a>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="carousel-item">
-                    <img src="img/mano.jpeg" alt="Mano" class="d-block w-100">
+                        <div class="d-flex justify-content-center">
+                            <div class="card border-0 shadow-sm p-4" style="max-width: 500px;">
+                                <span class="text-primary fw-bold fs-6">02 —</span>
+                                <h3 class="fw-bold">Infraestructura TI</h3>
+                                <p class="fs-5 text-secondary">Diseñamos y configuramos soluciones de infraestructura, redes y sistemas tecnológicos.</p>
+                                <a href="#" class="text-primary fw-semibold text-decoration-none">Ver más →</a>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="carousel-item">
-                    <img src="img/tablet.jpeg" alt="New York" class="d-block w-100">
+                        <div class="d-flex justify-content-center">
+                            <div class="card border-0 shadow-sm p-4" style="max-width: 500px;">
+                                <span class="text-primary fw-bold fs-6">03 —</span>
+                                <h3 class="fw-bold">Minería de Datos</h3>
+                                <p class="fs-5 text-secondary">Analizamos y procesamos datos para obtener información útil y apoyar la toma de decisiones.</p>
+                                <a href="#" class="text-primary fw-semibold text-decoration-none">Ver más →</a>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="carousel-item">
+                        <div class="d-flex justify-content-center">
+                            <div class="card border-0 shadow-sm p-4" style="max-width: 500px;">
+                                <span class="text-primary fw-bold fs-6">04 —</span>
+                                <h3 class="fw-bold">Inteligencia Artificial</h3>
+                                <p class="fs-5 text-secondary">Aplicamos fundamentos de IA y aprendizaje automático para desarrollar soluciones tecnológicas.</p>
+                                <a href="#" class="text-primary fw-semibold text-decoration-none">Ver más →</a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
-                <!-- Left and right controls/icons -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
+                <button class="carousel-control-prev" type="button" data-bs-target="#serviciosCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" style="filter: invert(1);"></span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
+                <button class="carousel-control-next" type="button" data-bs-target="#serviciosCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" style="filter: invert(1);"></span>
                 </button>
+
+                <div class="carousel-indicators" style="position: static; margin-top: 1.5rem;">
+                    <button type="button" data-bs-target="#serviciosCarousel" data-bs-slide-to="0" class="active" style="background-color:#0d6efd;"></button>
+                    <button type="button" data-bs-target="#serviciosCarousel" data-bs-slide-to="1" style="background-color:#0d6efd;"></button>
+                    <button type="button" data-bs-target="#serviciosCarousel" data-bs-slide-to="2" style="background-color:#0d6efd;"></button>
+                    <button type="button" data-bs-target="#serviciosCarousel" data-bs-slide-to="3" style="background-color:#0d6efd;"></button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Llamado a la acción -->
+        <div class="container-fluid bg-primary py-5">
+            <div class="container text-center text-white">
+                <h2 class="fw-bold mb-3">¿Tienes un proyecto?</h2>
+                <p class="fs-5 mb-4">Cuéntanos qué necesitas y encontraremos una solución tecnológica adecuada para ti.</p>
+                <a href="contacto.php" class="btn btn-light btn-lg fw-semibold">Contáctanos →</a>
+            </div>
         </div>
 
         <!-- Footer -->

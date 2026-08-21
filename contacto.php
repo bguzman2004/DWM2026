@@ -10,7 +10,7 @@
     </head>
     <body>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <nav class="navbar navbar-expand-sm bg-white navbar-light shadow-sm border-bottom">
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.php">
                     <img src="img/logo.jpg" alt="Logo" height="60">
@@ -21,7 +21,7 @@
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Empresa</a>
+                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown">Empresa</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="empresa.php">Nuestro Empresa</a></li>
                                 <li><a class="dropdown-item" href="#">Nuestro Equipo</a></li>
@@ -29,13 +29,13 @@
                             </ul>
                         </li>                        
                         <li class="nav-item">
-                            <a class="nav-link" href="productos.php">Productos</a>
+                            <a class="nav-link text-dark" href="productos.php">Productos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="servicios.php">Servicios</a>
+                            <a class="nav-link text-dark" href="servicios.php">Servicios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="contacto.php">Contacto</a>
+                            <a class="nav-link text-dark" href="contacto.php">Contacto</a>
                         </li>
                     </ul>
                 </div>
