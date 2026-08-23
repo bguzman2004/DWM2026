@@ -57,53 +57,8 @@
             <h2 class="fw-bold text-center mb-5">Nuestros servicios</h2>
 
             <div id="serviciosCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-
-                    <div class="carousel-item active">
-                        <div class="d-flex justify-content-center">
-                            <div class="card border-0 shadow-sm p-4" style="max-width: 500px;">
-                                <span class="text-primary fw-bold fs-6">01 —</span>
-                                <h3 class="fw-bold">Desarrollo Web</h3>
-                                <p class="fs-5 text-secondary">Creamos páginas web modernas, rápidas y adaptadas a computadores, tablets y celulares.</p>
-                                <a href="#" class="text-primary fw-semibold text-decoration-none">Ver más →</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item">
-                        <div class="d-flex justify-content-center">
-                            <div class="card border-0 shadow-sm p-4" style="max-width: 500px;">
-                                <span class="text-primary fw-bold fs-6">02 —</span>
-                                <h3 class="fw-bold">Infraestructura TI</h3>
-                                <p class="fs-5 text-secondary">Diseñamos y configuramos soluciones de infraestructura, redes y sistemas tecnológicos.</p>
-                                <a href="#" class="text-primary fw-semibold text-decoration-none">Ver más →</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item">
-                        <div class="d-flex justify-content-center">
-                            <div class="card border-0 shadow-sm p-4" style="max-width: 500px;">
-                                <span class="text-primary fw-bold fs-6">03 —</span>
-                                <h3 class="fw-bold">Minería de Datos</h3>
-                                <p class="fs-5 text-secondary">Analizamos y procesamos datos para obtener información útil y apoyar la toma de decisiones.</p>
-                                <a href="#" class="text-primary fw-semibold text-decoration-none">Ver más →</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item">
-                        <div class="d-flex justify-content-center">
-                            <div class="card border-0 shadow-sm p-4" style="max-width: 500px;">
-                                <span class="text-primary fw-bold fs-6">04 —</span>
-                                <h3 class="fw-bold">Inteligencia Artificial</h3>
-                                <p class="fs-5 text-secondary">Aplicamos fundamentos de IA y aprendizaje automático para desarrollar soluciones tecnológicas.</p>
-                                <a href="#" class="text-primary fw-semibold text-decoration-none">Ver más →</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                <!-- Los carousel-item se generan dinámicamente con JavaScript, ver script al final -->
+                <div class="carousel-inner" id="serviciosInner"></div>
 
                 <button class="carousel-control-prev" type="button" data-bs-target="#serviciosCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" style="filter: invert(1);"></span>
@@ -112,12 +67,7 @@
                     <span class="carousel-control-next-icon" style="filter: invert(1);"></span>
                 </button>
 
-                <div class="carousel-indicators" style="position: static; margin-top: 1.5rem;">
-                    <button type="button" data-bs-target="#serviciosCarousel" data-bs-slide-to="0" class="active" style="background-color:#0d6efd;"></button>
-                    <button type="button" data-bs-target="#serviciosCarousel" data-bs-slide-to="1" style="background-color:#0d6efd;"></button>
-                    <button type="button" data-bs-target="#serviciosCarousel" data-bs-slide-to="2" style="background-color:#0d6efd;"></button>
-                    <button type="button" data-bs-target="#serviciosCarousel" data-bs-slide-to="3" style="background-color:#0d6efd;"></button>
-                </div>
+                <div class="carousel-indicators" id="serviciosIndicadores" style="position: static; margin-top: 1.5rem;"></div>
             </div>
         </div>
 
@@ -175,5 +125,83 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            const servicios = [
+                {
+                    numero: "01",
+                    titulo: "Desarrollo Web",
+                    descripcion: "Creamos páginas web modernas, rápidas y adaptadas a computadores, tablets y celulares."
+                },
+                {
+                    numero: "02",
+                    titulo: "Infraestructura TI",
+                    descripcion: "Diseñamos y configuramos soluciones de infraestructura, redes y sistemas tecnológicos."
+                },
+                {
+                    numero: "03",
+                    titulo: "Minería de Datos",
+                    descripcion: "Analizamos y procesamos datos para obtener información útil y apoyar la toma de decisiones."
+                },
+                {
+                    numero: "04",
+                    titulo: "Inteligencia Artificial",
+                    descripcion: "Aplicamos fundamentos de IA y aprendizaje automático para desarrollar soluciones tecnológicas."
+                }
+            ];
+
+            const inner = document.getElementById("serviciosInner");
+            const indicadores = document.getElementById("serviciosIndicadores");
+
+            servicios.forEach((servicio, index) => {
+                // Item del carrusel
+                let item = document.createElement("div");
+                item.setAttribute("class", index === 0 ? "carousel-item active" : "carousel-item");
+
+                let wrapper = document.createElement("div");
+                wrapper.setAttribute("class", "d-flex justify-content-center");
+
+                let card = document.createElement("div");
+                card.setAttribute("class", "card border-0 shadow-sm p-4");
+                card.style.maxWidth = "500px";
+
+                let numero = document.createElement("span");
+                numero.setAttribute("class", "text-primary fw-bold fs-6");
+                numero.innerText = servicio.numero + " —";
+
+                let titulo = document.createElement("h3");
+                titulo.setAttribute("class", "fw-bold");
+                titulo.innerText = servicio.titulo;
+
+                let descripcion = document.createElement("p");
+                descripcion.setAttribute("class", "fs-5 text-secondary");
+                descripcion.innerText = servicio.descripcion;
+
+                let link = document.createElement("a");
+                link.setAttribute("href", "#");
+                link.setAttribute("class", "text-primary fw-semibold text-decoration-none");
+                link.innerText = "Ver más →";
+
+                card.appendChild(numero);
+                card.appendChild(titulo);
+                card.appendChild(descripcion);
+                card.appendChild(link);
+
+                wrapper.appendChild(card);
+                item.appendChild(wrapper);
+                inner.appendChild(item);
+
+                // Indicador (punto) correspondiente
+                let punto = document.createElement("button");
+                punto.setAttribute("type", "button");
+                punto.setAttribute("data-bs-target", "#serviciosCarousel");
+                punto.setAttribute("data-bs-slide-to", index);
+                punto.style.backgroundColor = "#0d6efd";
+                if (index === 0) {
+                    punto.classList.add("active");
+                }
+                indicadores.appendChild(punto);
+            });
+        </script>
     </body>
 </html>
