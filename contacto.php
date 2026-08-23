@@ -43,18 +43,36 @@
             </div>
         </nav>
 
-        <!-- Container -->
-        <div class="container-fluid bg-warning">
-            <form action="empresa.php">
-                <div class="mb-2 mt-2">
-                    <label for="email" class="form-label">Email:</label>
-                    <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
-                </div>
-                <label for="comment">Comentarios:</label>
-                <textarea class="form-control" rows="5" id="comment" name="text"></textarea>
-                <button type="submit" class="btn btn-primary mt-1">Enviar</button>
-            </form>
+        <div class="container-fluid bg-light py-5">
+            <div class="container text-center">
+                <h1 class="fw-bold display-5">CONTACTO</h1>
+                <p class="fs-4 text-secondary mb-0">¿Tienes un proyecto? Escríbenos y te responderemos a la brevedad.</p>
+            </div>
         </div>
+
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-md-7">
+
+                    <div id="mensajeConfirmacion" class="alert alert-success d-none" role="alert">
+                        ¡Gracias por tu mensaje! Te contactaremos pronto.
+                    </div>
+
+                    <form id="formContacto" class="card border-0 shadow-sm p-4">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Comentarios:</label>
+                            <textarea class="form-control" rows="5" id="comment" name="text" placeholder="Cuéntanos sobre tu proyecto" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer -->
         <div class="container-fluid bg-dark">
             <div class="row">
@@ -99,5 +117,18 @@
                 </div>
             </div>
         </div>
+        <script>
+            const formulario = document.getElementById("formContacto");
+            const mensaje = document.getElementById("mensajeConfirmacion");
+
+            formulario.addEventListener("submit", (evento) => {
+                evento.preventDefault();
+
+                mensaje.classList.remove("d-none");
+
+                document.getElementById("email").value = "";
+                document.getElementById("comment").value = "";
+            });
+        </script>
     </body>
 </html>
