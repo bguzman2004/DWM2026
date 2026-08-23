@@ -70,28 +70,8 @@
         <div class="container-fluid bg-light py-5">
             <div class="container">
                 <h2 class="fw-bold text-center mb-5">Lo que hacemos</h2>
-                <div class="row g-4 text-center">
-                    <div class="col-md-3">
-                        <i class="fa fa-code fs-1 text-primary mb-3"></i>
-                        <h5 class="fw-bold">Desarrollo Web</h5>
-                        <p class="text-secondary">Páginas modernas, rápidas y responsivas.</p>
-                    </div>
-                    <div class="col-md-3">
-                        <i class="fa fa-server fs-1 text-primary mb-3"></i>
-                        <h5 class="fw-bold">Infraestructura TI</h5>
-                        <p class="text-secondary">Redes y sistemas configurados a medida.</p>
-                    </div>
-                    <div class="col-md-3">
-                        <i class="fa fa-bar-chart fs-1 text-primary mb-3"></i>
-                        <h5 class="fw-bold">Minería de Datos</h5>
-                        <p class="text-secondary">Información útil para decidir mejor.</p>
-                    </div>
-                    <div class="col-md-3">
-                        <i class="fa fa-cogs fs-1 text-primary mb-3"></i>
-                        <h5 class="fw-bold">Inteligencia Artificial</h5>
-                        <p class="text-secondary">Automatización y aprendizaje aplicado.</p>
-                    </div>
-                </div>
+                <!-- Los 4 íconos de esta fila se generan dinámicamente con JavaScript, ver script al final -->
+                <div class="row g-4 text-center" id="contenedorServicios"></div>
                 <div class="text-center mt-5">
                     <a href="servicios.php" class="btn btn-primary">Ver todos los servicios →</a>
                 </div>
@@ -102,47 +82,12 @@
         <div class="container my-5">
             <h2 class="fw-bold text-center mb-2">Proyectos destacados</h2>
             <p class="text-secondary text-center mb-5">Algunos trabajos que hemos desarrollado.</p>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
-                            <i class="fa fa-shopping-cart" style="font-size: 60px; color:#0d6efd;"></i>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">TiendaExpress</h5>
-                            <p class="card-text text-secondary">Tienda online con carrito de compras y pasarela de pago.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
-                            <i class="fa fa-heartbeat" style="font-size: 60px; color:#0d6efd;"></i>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Clínica Salud+</h5>
-                            <p class="card-text text-secondary">Sistema de agendamiento de horas médicas en línea.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
-                            <i class="fa fa-cutlery" style="font-size: 60px; color:#0d6efd;"></i>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">RestoGourmet</h5>
-                            <p class="card-text text-secondary">Reservas online con menú digital y confirmación automática.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="row g-4" id="contenedorDestacados"></div>
             <div class="text-center mt-5">
                 <a href="productos.php" class="btn btn-outline-primary">Ver todos los proyectos →</a>
             </div>
         </div>
 
-        <!-- Llamado a la acción -->
         <div class="container-fluid bg-dark py-5">
             <div class="container text-center text-white">
                 <h2 class="fw-bold mb-3">¿Tienes un proyecto en mente?</h2>
@@ -196,6 +141,84 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            const resumenServicios = [
+                { icono: "fa-code", titulo: "Desarrollo Web", descripcion: "Páginas modernas, rápidas y responsivas." },
+                { icono: "fa-server", titulo: "Infraestructura TI", descripcion: "Redes y sistemas configurados a medida." },
+                { icono: "fa-bar-chart", titulo: "Minería de Datos", descripcion: "Información útil para decidir mejor." },
+                { icono: "fa-cogs", titulo: "Inteligencia Artificial", descripcion: "Automatización y aprendizaje aplicado." }
+            ];
+
+            const contenedorServicios = document.getElementById("contenedorServicios");
+
+            resumenServicios.forEach((item) => {
+                let col = document.createElement("div");
+                col.setAttribute("class", "col-md-3");
+
+                let icono = document.createElement("i");
+                icono.setAttribute("class", "fa " + item.icono + " fs-1 text-primary mb-3");
+
+                let titulo = document.createElement("h5");
+                titulo.setAttribute("class", "fw-bold");
+                titulo.innerText = item.titulo;
+
+                let descripcion = document.createElement("p");
+                descripcion.setAttribute("class", "text-secondary");
+                descripcion.innerText = item.descripcion;
+
+                col.appendChild(icono);
+                col.appendChild(titulo);
+                col.appendChild(descripcion);
+
+                contenedorServicios.appendChild(col);
+            });
+
+            const proyectosDestacados = [
+                { nombre: "TiendaExpress", descripcion: "Tienda online con carrito de compras y pasarela de pago.", icono: "fa-shopping-cart" },
+                { nombre: "Clínica Salud+", descripcion: "Sistema de agendamiento de horas médicas en línea.", icono: "fa-heartbeat" },
+                { nombre: "RestoGourmet", descripcion: "Reservas online con menú digital y confirmación automática.", icono: "fa-cutlery" }
+            ];
+
+            const contenedorDestacados = document.getElementById("contenedorDestacados");
+
+            proyectosDestacados.forEach((proyecto) => {
+                let col = document.createElement("div");
+                col.setAttribute("class", "col-md-4");
+
+                let card = document.createElement("div");
+                card.setAttribute("class", "card h-100 border-0 shadow-sm");
+
+                let cajaIcono = document.createElement("div");
+                cajaIcono.setAttribute("class", "d-flex align-items-center justify-content-center bg-light");
+                cajaIcono.style.height = "150px";
+
+                let icono = document.createElement("i");
+                icono.setAttribute("class", "fa " + proyecto.icono);
+                icono.style.fontSize = "60px";
+                icono.style.color = "#0d6efd";
+                cajaIcono.appendChild(icono);
+
+                let cardBody = document.createElement("div");
+                cardBody.setAttribute("class", "card-body");
+
+                let titulo = document.createElement("h5");
+                titulo.setAttribute("class", "card-title fw-bold");
+                titulo.innerText = proyecto.nombre;
+
+                let descripcion = document.createElement("p");
+                descripcion.setAttribute("class", "card-text text-secondary");
+                descripcion.innerText = proyecto.descripcion;
+
+                cardBody.appendChild(titulo);
+                cardBody.appendChild(descripcion);
+
+                card.appendChild(cajaIcono);
+                card.appendChild(cardBody);
+                col.appendChild(card);
+
+                contenedorDestacados.appendChild(col);
+            });
+        </script>
     </body>
 </html>
-

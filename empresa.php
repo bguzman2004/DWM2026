@@ -43,21 +43,59 @@
             </div>
         </nav>
 
-        <!-- Container -->
-        <div class="container-fluid bg-warning">
-            Página Principal<br>
-            <a href="index.php">Ir a Principal</a><br>
-            <a href="empresa.php">Ir a Empresa</a><br>
-            <a href="productos.php">Ir a Productos</a><br>
-            <a href="servicios.php">Ir a Servicios</a><br>
-            <a href="contacto.php">Ir a Contacto</a>
+        <!-- Hero Empresa -->
+        <div class="container-fluid bg-light py-5">
+            <div class="container text-center">
+                <h1 class="fw-bold display-5">NUESTRA EMPRESA</h1>
+                <p class="fs-4 text-secondary mb-0">Conoce quiénes somos y qué nos mueve.</p>
+            </div>
         </div>
+
+        <!-- Historia -->
+        <div class="container my-5">
+            <div class="row align-items-center">
+                <div class="col-md-5 text-center mb-4 mb-md-0">
+                    <i class="fa fa-building" style="font-size: 140px; color:#0d6efd;"></i>
+                </div>
+                <div class="col-md-7">
+                    <h2 class="fw-bold mb-3">Nuestra Historia</h2>
+                    <p class="fs-5 text-secondary">INFORMATICS nació de la idea de acercar la tecnología a cualquier persona o negocio, sin importar su tamaño. Desde entonces, hemos trabajado en proyectos de desarrollo web, infraestructura y datos, siempre buscando soluciones simples para problemas complejos.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Misión y Visión -->
+        <div class="container-fluid bg-light py-5">
+            <div class="container">
+                <div class="row g-4 text-center">
+                    <div class="col-md-6">
+                        <i class="fa fa-bullseye fs-1 text-primary mb-3"></i>
+                        <h4 class="fw-bold">Misión</h4>
+                        <p class="text-secondary">Entregar soluciones tecnológicas de calidad que impulsen el crecimiento de nuestros clientes.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="fa fa-eye fs-1 text-primary mb-3"></i>
+                        <h4 class="fw-bold">Visión</h4>
+                        <p class="text-secondary">Ser referentes en desarrollo de software e innovación tecnológica en Latinoamérica.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nuestro Equipo -->
+        <div class="container my-5">
+            <h2 class="fw-bold text-center mb-2">Nuestro Equipo</h2>
+            <p class="text-secondary text-center mb-5">Las personas detrás de INFORMATICS.</p>
+            <!-- Las tarjetas del equipo se generan dinámicamente con JavaScript, ver script al final -->
+            <div class="row g-4" id="contenedorEquipo"></div>
+        </div>
+
         <!-- Footer -->
         <div class="container-fluid bg-dark">
             <div class="row">
                 <div class="col-4"></div>
                 <div class="col-4 d-flex justify-content-center" 
-                style="color:white"><strong></strong></div>
+                style="color:white"><strong>© 2026 INFORMATICS                         Creado por M.CAETEMORA × B.GZMN</strong></div>
                 <div class="col-4"></div>
             </div>
         </div>
@@ -97,5 +135,44 @@
                 </div>
             </div>
         </div>
+        
+        <script>
+            const equipo = [
+                { nombre: "Matías Cañete", cargo: "Full Stack Developer", icono: "fa-user" },
+                { nombre: "Benjamín Guzmán", cargo: "Backend Developer", icono: "fa-user" },
+                { nombre: "Camila Rojas", cargo: "Diseñadora UX/UI", icono: "fa-user" },
+                { nombre: "Diego Fuentes", cargo: "Analista de Datos", icono: "fa-user" }
+            ];
+
+            const contenedorEquipo = document.getElementById("contenedorEquipo");
+
+            equipo.forEach((persona) => {
+                let col = document.createElement("div");
+                col.setAttribute("class", "col-md-6 col-lg-3");
+
+                let card = document.createElement("div");
+                card.setAttribute("class", "card h-100 border-0 shadow-sm text-center p-4");
+
+                let icono = document.createElement("i");
+                icono.setAttribute("class", "fa " + persona.icono);
+                icono.style.fontSize = "70px";
+                icono.style.color = "#0d6efd";
+
+                let nombre = document.createElement("h5");
+                nombre.setAttribute("class", "fw-bold mt-3");
+                nombre.innerText = persona.nombre;
+
+                let cargo = document.createElement("p");
+                cargo.setAttribute("class", "text-secondary mb-0");
+                cargo.innerText = persona.cargo;
+
+                card.appendChild(icono);
+                card.appendChild(nombre);
+                card.appendChild(cargo);
+                col.appendChild(card);
+
+                contenedorEquipo.appendChild(col);
+            });
+        </script>
     </body>
 </html>
