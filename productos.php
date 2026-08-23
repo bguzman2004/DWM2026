@@ -68,7 +68,6 @@
                     </div>
                 </div>
 
-                <!-- Left and right controls/icons -->
                 <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon"></span>
                 </button>
@@ -84,77 +83,7 @@
             <h2 class="fw-bold text-center mb-2">Nuestros Trabajos</h2>
             <p class="text-secondary text-center mb-5">Algunas de las páginas web que hemos desarrollado para nuestros clientes.</p>
 
-            <div class="row g-4">
-
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
-                            <i class="fa fa-shopping-cart" style="font-size: 60px; color:#0d6efd;"></i>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">TiendaExpress</h5>
-                            <p class="card-text text-secondary">Tienda online de venta de artículos electrónicos con carrito de compras y pasarela de pago.</p>
-                            <div class="d-flex flex-wrap gap-1">
-                                <span class="badge bg-primary">HTML</span>
-                                <span class="badge bg-primary">CSS</span>
-                                <span class="badge bg-primary">PHP</span>
-                                <span class="badge bg-primary">MySQL</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
-                            <i class="fa fa-heartbeat" style="font-size: 60px; color:#0d6efd;"></i>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Clínica Salud+</h5>
-                            <p class="card-text text-secondary">Sistema de agendamiento de horas médicas en línea con panel para pacientes y doctores.</p>
-                            <div class="d-flex flex-wrap gap-1">
-                                <span class="badge bg-primary">PHP</span>
-                                <span class="badge bg-primary">Bootstrap</span>
-                                <span class="badge bg-primary">MySQL</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
-                            <i class="fa fa-cutlery" style="font-size: 60px; color:#0d6efd;"></i>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">RestoGourmet</h5>
-                            <p class="card-text text-secondary">Sitio de reservas online para restaurante con menú digital y confirmación automática.</p>
-                            <div class="d-flex flex-wrap gap-1">
-                                <span class="badge bg-primary">JavaScript</span>
-                                <span class="badge bg-primary">Node.js</span>
-                                <span class="badge bg-primary">MongoDB</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
-                            <i class="fa fa-graduation-cap" style="font-size: 60px; color:#0d6efd;"></i>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">EduOnline</h5>
-                            <p class="card-text text-secondary">Plataforma de cursos virtuales con seguimiento de progreso y certificados descargables.</p>
-                            <div class="d-flex flex-wrap gap-1">
-                                <span class="badge bg-primary">React</span>
-                                <span class="badge bg-primary">Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            <div class="row g-4" id="contenedorProyectos"></div>
         </div>
 
         <!-- Footer -->
@@ -202,5 +131,90 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            const proyectos = [
+                {
+                    nombre: "TiendaExpress",
+                    descripcion: "Tienda online de venta de artículos electrónicos con carrito de compras y pasarela de pago.",
+                    icono: "fa-shopping-cart",
+                    tecnologias: ["HTML", "CSS", "PHP", "MySQL"]
+                },
+                {
+                    nombre: "Clínica Salud+",
+                    descripcion: "Sistema de agendamiento de horas médicas en línea con panel para pacientes y doctores.",
+                    icono: "fa-heartbeat",
+                    tecnologias: ["PHP", "Bootstrap", "MySQL"]
+                },
+                {
+                    nombre: "RestoGourmet",
+                    descripcion: "Sitio de reservas online para restaurante con menú digital y confirmación automática.",
+                    icono: "fa-cutlery",
+                    tecnologias: ["JavaScript", "Node.js", "MongoDB"]
+                },
+                {
+                    nombre: "EduOnline",
+                    descripcion: "Plataforma de cursos virtuales con seguimiento de progreso y certificados descargables.",
+                    icono: "fa-graduation-cap",
+                    tecnologias: ["React", "Firebase"]
+                }
+            ];
+
+            const contenedor = document.getElementById("contenedorProyectos");
+
+            proyectos.forEach((proyecto) => {
+                // Columna
+                let col = document.createElement("div");
+                col.setAttribute("class", "col-md-6 col-lg-3");
+
+                // Tarjeta
+                let card = document.createElement("div");
+                card.setAttribute("class", "card h-100 border-0 shadow-sm");
+
+                // Caja del ícono
+                let cajaIcono = document.createElement("div");
+                cajaIcono.setAttribute("class", "d-flex align-items-center justify-content-center bg-light");
+                cajaIcono.style.height = "150px";
+
+                let icono = document.createElement("i");
+                icono.setAttribute("class", "fa " + proyecto.icono);
+                icono.style.fontSize = "60px";
+                icono.style.color = "#0d6efd";
+                cajaIcono.appendChild(icono);
+
+                // Cuerpo de la tarjeta
+                let cardBody = document.createElement("div");
+                cardBody.setAttribute("class", "card-body");
+
+                let titulo = document.createElement("h5");
+                titulo.setAttribute("class", "card-title fw-bold");
+                titulo.innerText = proyecto.nombre;
+
+                let descripcion = document.createElement("p");
+                descripcion.setAttribute("class", "card-text text-secondary");
+                descripcion.innerText = proyecto.descripcion;
+
+                // Badges de tecnologías
+                let badges = document.createElement("div");
+                badges.setAttribute("class", "d-flex flex-wrap gap-1");
+
+                proyecto.tecnologias.forEach((tecnologia) => {
+                    let badge = document.createElement("span");
+                    badge.setAttribute("class", "badge bg-primary");
+                    badge.innerText = tecnologia;
+                    badges.appendChild(badge);
+                });
+
+                cardBody.appendChild(titulo);
+                cardBody.appendChild(descripcion);
+                cardBody.appendChild(badges);
+
+                card.appendChild(cajaIcono);
+                card.appendChild(cardBody);
+                col.appendChild(card);
+
+                contenedor.appendChild(col);
+            });
+        </script>
     </body>
 </html>
