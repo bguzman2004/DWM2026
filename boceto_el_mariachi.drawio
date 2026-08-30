@@ -1,0 +1,88 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.8 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.8">
+  <diagram name="Boceto El Mariachi" id="0">
+    <mxGraphModel dx="2345" dy="1129" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="logo" value="LOGO EL MARIACHI" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F4E9DA;strokeColor=#7B2D26;fontStyle=1;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="40" y="20" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="social" value="FB | IG | WhatsApp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7B2D26;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="630" y="30" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="video" value="VIDEO / FOTO PROMOCIONAL&#xa;► (banner principal)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#4C6444;strokeColor=#2B2B2B;fontColor=#FFFFFF;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="40" y="110" width="380" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="promo1" value="PROMOCIÓN DEL DÍA&#xa;(banner 300x100)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E4A93B;strokeColor=#2B2B2B;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="450" y="110" width="360" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="chatbox" value="PEDIDO RÁPIDO&#xa;(chat / cotización online)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#A3231F;strokeColor=#2B2B2B;fontColor=#FFFFFF;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="450" y="200" width="360" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="tabs" value="MENÚ | NOSOTROS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4E9DA;strokeColor=#4C6444;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="430" width="380" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="menuList" value="Tacos .........&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Burrito ........&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Nachos ........&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4C6444;fontSize=13;align=left;spacingLeft=10;verticalAlign=top;spacingTop=10;" parent="1" vertex="1">
+          <mxGeometry x="40" y="460" width="380" height="330" as="geometry" />
+        </mxCell>
+        <mxCell id="promo2" value="PROMO 2x1 EN TACOS&#xa;(banner 300x100)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E4A93B;strokeColor=#2B2B2B;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="450" y="520" width="360" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ig" value="SÍGUENOS EN&#xa;INSTAGRAM" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F4E9DA;strokeColor=#A3231F;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="450" y="620" width="170" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="google" value="RESEÑAS EN&#xa;GOOGLE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F4E9DA;strokeColor=#A3231F;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="640" y="620" width="170" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="paletaTitulo" value="Paleta de colores (inspirada en Chipotle Mexican Grill)" style="text;html=1;align=left;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="820" width="500" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c1" value="#A3231F&#xa;Rojo Chile" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#A3231F;strokeColor=none;fontColor=#FFFFFF;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="40" y="860" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="#F4E9DA&#xa;Crema" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F4E9DA;strokeColor=none;fontColor=#2B2B2B;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="150" y="860" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="#4C6444&#xa;Verde Palta" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#4C6444;strokeColor=none;fontColor=#FFFFFF;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="260" y="860" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="#E4A93B&#xa;Amarillo Mostaza" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E4A93B;strokeColor=none;fontColor=#2B2B2B;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="370" y="860" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="#2B2B2B&#xa;Carbón" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2B2B2B;strokeColor=none;fontColor=#FFFFFF;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="480" y="860" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="flujoTitulo" value="Navegación simple de la app" style="text;html=1;align=left;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="950" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="n1" value="Inicio" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4E9DA;strokeColor=#7B2D26;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="40" y="990" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n2" value="Menú" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4E9DA;strokeColor=#7B2D26;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="200" y="990" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n3" value="Detalle&#xa;Producto" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4E9DA;strokeColor=#7B2D26;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="360" y="990" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n4" value="Carrito" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4E9DA;strokeColor=#7B2D26;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="520" y="990" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n5" value="Confirmar&#xa;Pedido" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4E9DA;strokeColor=#7B2D26;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="680" y="990" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#A3231F;endArrow=block;" parent="1" source="n1" target="n2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#A3231F;endArrow=block;" parent="1" source="n2" target="n3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#A3231F;endArrow=block;" parent="1" source="n3" target="n4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#A3231F;endArrow=block;" parent="1" source="n4" target="n5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
