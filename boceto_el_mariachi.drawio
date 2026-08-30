@@ -24,6 +24,7 @@
         </mxCell>
         <mxCell id="menuList" value="Tacos .........&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Burrito ........&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Nachos ........&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4C6444;fontSize=13;align=left;spacingLeft=10;verticalAlign=top;spacingTop=10;" parent="1" vertex="1">
           <mxGeometry x="40" y="460" width="380" height="330" as="geometry" />
+
         </mxCell>
         <mxCell id="promo2" value="PROMO 2x1 EN TACOS&#xa;(banner 300x100)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E4A93B;strokeColor=#2B2B2B;fontSize=13;" parent="1" vertex="1">
           <mxGeometry x="450" y="520" width="360" height="80" as="geometry" />
