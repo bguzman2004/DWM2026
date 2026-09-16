@@ -1,0 +1,200 @@
+/* ============================================================
+   El Mariachi — hoja de estilos del sitio
+   Paleta tomada del boceto (Chipotle Mexican Grill):
+   Rojo Chile #A3231F · Crema #F4E9DA · Verde Palta #4C6444
+   Amarillo Mostaza #E4A93B · Carbón #2B2B2B
+   ============================================================ */
+
+:root {
+  --rojo: #A3231F;
+  --rojo-oscuro: #7B1B18;
+  --crema: #F4E9DA;
+  --verde: #4C6444;
+  --verde-oscuro: #37492F;
+  --mostaza: #E4A93B;
+  --carbon: #2B2B2B;
+  --blanco: #FFFFFF;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Work Sans", -apple-system, Segoe UI, sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--carbon);
+  background-color: var(--crema);
+}
+
+h1, h2, h3, h4, .brand-logo {
+  font-family: var(--font-display);
+}
+
+a { text-decoration: none; }
+
+/* --- Navbar --- */
+.navbar-mariachi {
+  background-color: var(--crema);
+  border-bottom: 3px solid var(--rojo);
+}
+.brand-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--rojo);
+  letter-spacing: 0.02em;
+}
+.brand-logo span { color: var(--verde); }
+.navbar-mariachi .nav-link {
+  color: var(--carbon);
+  font-weight: 500;
+}
+.navbar-mariachi .nav-link:hover,
+.navbar-mariachi .nav-link.active {
+  color: var(--rojo);
+}
+.btn-mariachi {
+  background-color: var(--rojo);
+  border-color: var(--rojo);
+  color: var(--blanco);
+  font-weight: 600;
+}
+.btn-mariachi:hover {
+  background-color: var(--rojo-oscuro);
+  border-color: var(--rojo-oscuro);
+  color: var(--blanco);
+}
+.btn-outline-mariachi {
+  border: 2px solid var(--verde);
+  color: var(--verde);
+  font-weight: 600;
+  background: transparent;
+}
+.btn-outline-mariachi:hover {
+  background-color: var(--verde);
+  color: var(--blanco);
+}
+
+/* --- Hero --- */
+.hero-mariachi {
+  background: linear-gradient(135deg, var(--carbon) 0%, var(--rojo-oscuro) 100%);
+  color: var(--crema);
+  position: relative;
+  overflow: hidden;
+}
+.hero-mariachi::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--mostaza) 2px, transparent 2px);
+  background-size: 28px 28px;
+  opacity: 0.08;
+}
+.hero-mariachi .container { position: relative; }
+.hero-mariachi h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); }
+.hero-mariachi .lead { color: #E9DCC8; }
+
+/* --- Franja de página interior (empresa, servicios, productos, contacto) --- */
+.page-header {
+  background-color: var(--verde);
+  color: var(--crema);
+  padding: 3.5rem 0 2.5rem;
+}
+.page-header h1 { color: var(--blanco); }
+
+/* --- Tarjetas de categoría / servicio --- */
+.card-mariachi {
+  border: none;
+  border-radius: 0.75rem;
+  padding: 2rem 1.5rem;
+  height: 100%;
+  transition: transform 0.15s ease;
+}
+.card-mariachi:hover { transform: translateY(-4px); }
+.card-mariachi .icono {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  color: var(--blanco);
+}
+.card-tacos { background-color: #FBEFDD; }
+.card-tacos .icono { background-color: var(--mostaza); }
+.card-burritos { background-color: #F6E3DF; }
+.card-burritos .icono { background-color: var(--rojo); }
+.card-bebidas { background-color: #E7ECE3; }
+.card-bebidas .icono { background-color: var(--verde); }
+
+/* --- Sección promo --- */
+.promo-banda {
+  background-color: var(--mostaza);
+  color: var(--carbon);
+  padding: 1.5rem 0;
+}
+.promo-banda strong { color: var(--rojo-oscuro); }
+
+/* --- Menú / Platillos --- */
+.nav-tabs-mariachi .nav-link {
+  color: var(--carbon);
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-weight: 600;
+}
+.nav-tabs-mariachi .nav-link.active {
+  color: var(--rojo);
+  border-bottom-color: var(--rojo);
+  background: transparent;
+}
+.platillo-card {
+  background-color: var(--blanco);
+  border-radius: 0.6rem;
+  padding: 1.1rem 1.3rem;
+  border-left: 4px solid var(--mostaza);
+  height: 100%;
+}
+.platillo-card .precio {
+  color: var(--rojo);
+  font-weight: 700;
+  font-family: var(--font-display);
+}
+
+/* --- Contacto --- */
+.mapa-placeholder {
+  background: repeating-linear-gradient(45deg, #E4DCC8, #E4DCC8 10px, #DCD2BA 10px, #DCD2BA 20px);
+  border-radius: 0.6rem;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--carbon);
+  font-weight: 600;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* --- WhatsApp flotante --- */
+.wsp-flotante {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  background-color: var(--verde);
+  color: var(--blanco);
+  border-radius: 50px;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  z-index: 1030;
+}
+.wsp-flotante:hover { background-color: var(--verde-oscuro); color: var(--blanco); }
+
+/* --- Footer --- */
+.footer-mariachi {
+  background-color: var(--carbon);
+  color: var(--crema);
+  padding: 2.5rem 0 1.25rem;
+}
+.footer-mariachi a { color: var(--crema); }
+.footer-mariachi a:hover { color: var(--mostaza); }
+.footer-mariachi hr { border-color: #4a4a4a; }

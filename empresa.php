@@ -1,178 +1,116 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <title>Página Principal</title>
+        <title>Nosotros | El Mariachi</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/mariachi.css">
     </head>
     <body>
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-sm bg-white navbar-light shadow-sm border-bottom">
+        <nav class="navbar navbar-expand-sm navbar-mariachi">
             <div class="container-fluid">
-                <a class="navbar-brand" href="index.php">
-                    <img src="img/logo.jpg" alt="Logo" height="60">
-                </a>
+                <a class="navbar-brand brand-logo" href="index.php">El <span>Mariachi</span></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                    <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown">Empresa</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="empresa.php">Nuestro Empresa</a></li>
-                                <li><a class="dropdown-item" href="#">Nuestro Equipo</a></li>
-                                <li><a class="dropdown-item" href="#">Misión</a></li>
-                            </ul>
-                        </li>                        
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="productos.php">Productos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="servicios.php">Servicios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="contacto.php">Contacto</a>
-                        </li>
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.php">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="empresa.php">Nosotros</a></li>
+                        <li class="nav-item"><a class="nav-link" href="servicios.php">Servicios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="productos.php">Menú</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contacto.php">Contacto</a></li>
                     </ul>
                 </div>
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#myModal">Acceder</button>
+                <a href="https://wa.me/56900000000" class="btn btn-mariachi" target="_blank" rel="noopener">
+                    <i class="fa fa-whatsapp"></i> Pedir ahora
+                </a>
             </div>
         </nav>
 
-        <!-- Hero Empresa -->
-        <div class="container-fluid bg-light py-5">
-            <div class="container text-center">
-                <h1 class="fw-bold display-5">NUESTRA EMPRESA</h1>
-                <p class="fs-4 text-secondary mb-0">Conoce quiénes somos y qué nos mueve.</p>
-            </div>
-        </div>
-
-        <!-- Historia -->
-        <div class="container my-5">
-            <div class="row align-items-center">
-                <div class="col-md-5 text-center mb-4 mb-md-0">
-                    <i class="fa fa-building" style="font-size: 140px; color:#0d6efd;"></i>
-                </div>
-                <div class="col-md-7">
-                    <h2 class="fw-bold mb-3">Nuestra Historia</h2>
-                    <p class="fs-5 text-secondary">INFORMATICS nació de la idea de acercar la tecnología a cualquier persona o negocio, sin importar su tamaño. Desde entonces, hemos trabajado en proyectos de desarrollo web, infraestructura y datos, siempre buscando soluciones simples para problemas complejos.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Misión y Visión -->
-        <div class="container-fluid bg-light py-5">
+        <div class="page-header text-center">
             <div class="container">
-                <div class="row g-4 text-center">
-                    <div class="col-md-6">
-                        <i class="fa fa-bullseye fs-1 text-primary mb-3"></i>
-                        <h4 class="fw-bold">Misión</h4>
-                        <p class="text-secondary">Entregar soluciones tecnológicas de calidad que impulsen el crecimiento de nuestros clientes.</p>
-                    </div>
-                    <div class="col-md-6">
-                        <i class="fa fa-eye fs-1 text-primary mb-3"></i>
-                        <h4 class="fw-bold">Visión</h4>
-                        <p class="text-secondary">Ser referentes en desarrollo de software e innovación tecnológica en Latinoamérica.</p>
-                    </div>
-                </div>
+                <h1 class="fw-bold">Nuestra historia</h1>
+                <p class="mb-0">De la cocina de la familia Cañete a tu mesa</p>
             </div>
         </div>
 
-        <!-- Nuestro Equipo -->
         <div class="container my-5">
-            <h2 class="fw-bold text-center mb-2">Nuestro Equipo</h2>
-            <p class="text-secondary text-center mb-5">Las personas detrás de INFORMATICS.</p>
-            <!-- Las tarjetas del equipo se generan dinámicamente con JavaScript, ver script al final -->
-            <div class="row g-4" id="contenedorEquipo"></div>
-        </div>
-
-        <!-- Footer -->
-        <div class="container-fluid bg-dark">
-            <div class="row">
-                <div class="col-4"></div>
-                <div class="col-4 d-flex justify-content-center" 
-                style="color:white"><strong>© 2026 INFORMATICS                         Creado por M.CAETEMORA × B.GZMN</strong></div>
-                <div class="col-4"></div>
-            </div>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal" id="myModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Autenticar</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <form action="empresa.php">
-                            <div class="mb-2 mt-2">
-                                <label for="email" class="form-label">Correo:</label>
-                                <input type="email" class="form-control" id="email" placeholder="Ingresar Correo " name="email">
-                            </div>
-                            <div class="mb-2">
-                                <label for="pwd" class="form-label">Contraseña:</label>
-                                <input type="password" class="form-control" id="pwd" placeholder="Ingresar Contraseña" name="pswd">
-                            </div>
-                            <div class="form-check mb-2">
-                                <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="Recordarme"> Recordarme
-                                </label>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Ingresar <i class="fa fa-check-circle"></i></button>
-                        </form>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            <div class="row g-5 align-items-center">
+                <div class="col-12 col-md-6">
+                    <h2 class="h4 fw-bold">¿Quiénes somos?</h2>
+                    <p class="text-secondary">El Mariachi partió como el sueño de traer la comida callejera mexicana a Chile, tal como se prepara en los puestos de barrio: al momento, con harta salsa y sin apuro. Hoy seguimos cocinando con la misma receta con la que empezamos, platillo por platillo.</p>
+                    <p class="text-secondary">Cada mañana preparamos las salsas, marinamos las carnes y armamos el menú del día — nada viene congelado ni precocido.</p>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="card-mariachi card-tacos">
+                        <i class="fa fa-quote-left fa-2x mb-3" style="color:var(--rojo)"></i>
+                        <p class="fst-italic mb-1">"Queríamos que la gente sintiera el mismo taco que se come en la calle en México, pero acá en Chile."</p>
+                        <p class="fw-bold mb-0">— Fundadores de El Mariachi</p>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <script>
-            const equipo = [
-                { nombre: "Matías Cañete", cargo: "Full Stack Developer", icono: "fa-user" },
-                { nombre: "Benjamín Guzmán", cargo: "Backend Developer", icono: "fa-user" },
-                { nombre: "Camila Rojas", cargo: "Diseñadora UX/UI", icono: "fa-user" },
-                { nombre: "Diego Fuentes", cargo: "Analista de Datos", icono: "fa-user" }
-            ];
 
-            const contenedorEquipo = document.getElementById("contenedorEquipo");
+        <div class="container-fluid" style="background-color:var(--verde-oscuro);">
+            <div class="container py-5">
+                <h2 class="h4 fw-bold text-center mb-5" style="color:var(--crema)">Nuestros valores</h2>
+                <div class="row g-4">
+                    <div class="col-12 col-md-4">
+                        <div class="card-mariachi card-tacos text-center h-100">
+                            <div class="icono mx-auto"><i class="fa fa-leaf"></i></div>
+                            <h3 class="h6 fw-bold">Ingredientes frescos</h3>
+                            <p class="text-secondary small mb-0">Compra diaria, sin conservantes.</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="card-mariachi card-burritos text-center h-100">
+                            <div class="icono mx-auto"><i class="fa fa-fire"></i></div>
+                            <h3 class="h6 fw-bold">Receta de familia</h3>
+                            <p class="text-secondary small mb-0">Las mismas salsas desde el primer día.</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="card-mariachi card-bebidas text-center h-100">
+                            <div class="icono mx-auto"><i class="fa fa-clock-o"></i></div>
+                            <h3 class="h6 fw-bold">Al momento</h3>
+                            <p class="text-secondary small mb-0">Cada pedido se cocina cuando llega, no antes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            equipo.forEach((persona) => {
-                let col = document.createElement("div");
-                col.setAttribute("class", "col-md-6 col-lg-3");
+        <footer class="footer-mariachi">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-12 col-md-4">
+                        <div class="brand-logo h5 mb-2">El <span>Mariachi</span></div>
+                        <p class="small mb-0">Comida mexicana casera, hecha al momento.</p>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="fw-bold mb-2">Síguenos</div>
+                        <a href="#" class="me-3"><i class="fa fa-facebook fa-lg"></i></a>
+                        <a href="#" class="me-3"><i class="fa fa-instagram fa-lg"></i></a>
+                        <a href="https://wa.me/56900000000" target="_blank" rel="noopener"><i class="fa fa-whatsapp fa-lg"></i></a>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="fw-bold mb-2">Horario</div>
+                        <p class="small mb-0">Mar–Dom, 12:00–22:00<br>Lunes cerrado</p>
+                    </div>
+                </div>
+                <hr>
+                <p class="small text-center mb-0">&copy; 2026 El Mariachi — Creado por M.CAÑETE × B.GZMN</p>
+            </div>
+        </footer>
 
-                let card = document.createElement("div");
-                card.setAttribute("class", "card h-100 border-0 shadow-sm text-center p-4");
-
-                let icono = document.createElement("i");
-                icono.setAttribute("class", "fa " + persona.icono);
-                icono.style.fontSize = "70px";
-                icono.style.color = "#0d6efd";
-
-                let nombre = document.createElement("h5");
-                nombre.setAttribute("class", "fw-bold mt-3");
-                nombre.innerText = persona.nombre;
-
-                let cargo = document.createElement("p");
-                cargo.setAttribute("class", "text-secondary mb-0");
-                cargo.innerText = persona.cargo;
-
-                card.appendChild(icono);
-                card.appendChild(nombre);
-                card.appendChild(cargo);
-                col.appendChild(card);
-
-                contenedorEquipo.appendChild(col);
-            });
-        </script>
+        <a href="https://wa.me/56900000000" class="wsp-flotante" target="_blank" rel="noopener">
+            <i class="fa fa-whatsapp"></i> Escríbenos
+        </a>
     </body>
 </html>

@@ -1,134 +1,113 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <title>Página Principal</title>
+        <title>Contacto | El Mariachi</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/mariachi.css">
     </head>
     <body>
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-sm bg-white navbar-light shadow-sm border-bottom">
+        <nav class="navbar navbar-expand-sm navbar-mariachi">
             <div class="container-fluid">
-                <a class="navbar-brand" href="index.php">
-                    <img src="img/logo.jpg" alt="Logo" height="60">
-                </a>
+                <a class="navbar-brand brand-logo" href="index.php">El <span>Mariachi</span></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                    <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown">Empresa</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="empresa.php">Nuestro Empresa</a></li>
-                                <li><a class="dropdown-item" href="#">Nuestro Equipo</a></li>
-                                <li><a class="dropdown-item" href="#">Misión</a></li>
-                            </ul>
-                        </li>                        
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="productos.php">Productos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="servicios.php">Servicios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="contacto.php">Contacto</a>
-                        </li>
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.php">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="empresa.php">Nosotros</a></li>
+                        <li class="nav-item"><a class="nav-link" href="servicios.php">Servicios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="productos.php">Menú</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="contacto.php">Contacto</a></li>
                     </ul>
                 </div>
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#myModal">Acceder</button>
+                <a href="https://wa.me/56900000000" class="btn btn-mariachi" target="_blank" rel="noopener">
+                    <i class="fa fa-whatsapp"></i> Pedir ahora
+                </a>
             </div>
         </nav>
 
-        <div class="container-fluid bg-light py-5">
-            <div class="container text-center">
-                <h1 class="fw-bold display-5">CONTACTO</h1>
-                <p class="fs-4 text-secondary mb-0">¿Tienes un proyecto? Escríbenos y te responderemos a la brevedad.</p>
+        <div class="page-header text-center">
+            <div class="container">
+                <h1 class="fw-bold">Contacto</h1>
+                <p class="mb-0">Escríbenos, reserva tu mesa o cotiza tu evento</p>
             </div>
         </div>
 
         <div class="container my-5">
-            <div class="row justify-content-center">
-                <div class="col-md-7">
-
-                    <div id="mensajeConfirmacion" class="alert alert-success d-none" role="alert">
-                        ¡Gracias por tu mensaje! Te contactaremos pronto.
-                    </div>
-
-                    <form id="formContacto" class="card border-0 shadow-sm p-4">
+            <div class="row g-5">
+                <div class="col-12 col-md-6">
+                    <h2 class="h5 fw-bold mb-3">Envíanos un mensaje</h2>
+                    <form action="#" method="post">
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email:</label>
-                            <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo" name="email" required>
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu nombre" required>
                         </div>
                         <div class="mb-3">
-                            <label for="comment" class="form-label">Comentarios:</label>
-                            <textarea class="form-control" rows="5" id="comment" name="text" placeholder="Cuéntanos sobre tu proyecto" required></textarea>
+                            <label for="email" class="form-label">Correo</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="tu@correo.com" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Enviar</button>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono (opcional)</label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="+56 9 1234 5678">
+                        </div>
+                        <div class="mb-3">
+                            <label for="mensaje" class="form-label">Mensaje</label>
+                            <textarea class="form-control" id="mensaje" name="mensaje" rows="4" placeholder="Cuéntanos qué necesitas: reserva, evento, o alguna consulta" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-mariachi">Enviar mensaje</button>
                     </form>
                 </div>
-            </div>
-        </div>
 
-        <!-- Footer -->
-        <div class="container-fluid bg-dark">
-            <div class="row">
-                <div class="col-4"></div>
-                <div class="col-4 d-flex justify-content-center" 
-                style="color:white"><strong>© 2026 INFORMATICS                         Creado por M.CAETEMORA × B.GZMN</strong></div>
-                <div class="col-4"></div>
-            </div>
-        </div>
-        <!-- Modal -->
-        <div class="modal" id="myModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Autenticar</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="col-12 col-md-6">
+                    <h2 class="h5 fw-bold mb-3">Encuéntranos</h2>
+                    <div class="mapa-placeholder mb-3">
+                        <span><i class="fa fa-map-marker fa-2x d-block mb-2"></i>Mapa — Av. Ejemplo 123, Santiago</span>
                     </div>
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <form action="empresa.php">
-                    <div class="mb-2 mt-2">
-                        <label for="email" class="form-label">Correo:</label>
-                        <input type="email" class="form-control" id="email" placeholder="Ingresar Correo" name="email">
-                    </div>
-                            <div class="mb-2">
-                                <label for="pwd" class="form-label">Contraseña:</label>
-                                <input type="password" class="form-control" id="pwd" placeholder="Ingresar Contraseña" name="pswd">
-                            </div>
-                            <div class="form-check mb-2">
-                                <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="Recordarme"> Recordarme
-                                </label>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Ingresar  <i class="fa fa-check-circle"></i></button>
-                        </form>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fa fa-map-marker me-2" style="color:var(--rojo)"></i>Av. Ejemplo 123, Santiago</li>
+                        <li class="mb-2"><i class="fa fa-phone me-2" style="color:var(--rojo)"></i>+56 9 0000 0000</li>
+                        <li class="mb-2"><i class="fa fa-envelope me-2" style="color:var(--rojo)"></i>contacto@elmariachi.cl</li>
+                        <li class="mb-2"><i class="fa fa-clock-o me-2" style="color:var(--rojo)"></i>Mar–Dom, 12:00–22:00 (lunes cerrado)</li>
+                    </ul>
+                    <a href="https://wa.me/56900000000" class="btn btn-outline-mariachi" target="_blank" rel="noopener">
+                        <i class="fa fa-whatsapp"></i> Escríbenos por WhatsApp
+                    </a>
                 </div>
             </div>
         </div>
-        <script>
-            const formulario = document.getElementById("formContacto");
-            const mensaje = document.getElementById("mensajeConfirmacion");
 
-            formulario.addEventListener("submit", (evento) => {
-                evento.preventDefault();
+        <footer class="footer-mariachi">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-12 col-md-4">
+                        <div class="brand-logo h5 mb-2">El <span>Mariachi</span></div>
+                        <p class="small mb-0">Comida mexicana casera, hecha al momento.</p>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="fw-bold mb-2">Síguenos</div>
+                        <a href="#" class="me-3"><i class="fa fa-facebook fa-lg"></i></a>
+                        <a href="#" class="me-3"><i class="fa fa-instagram fa-lg"></i></a>
+                        <a href="https://wa.me/56900000000" target="_blank" rel="noopener"><i class="fa fa-whatsapp fa-lg"></i></a>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="fw-bold mb-2">Horario</div>
+                        <p class="small mb-0">Mar–Dom, 12:00–22:00<br>Lunes cerrado</p>
+                    </div>
+                </div>
+                <hr>
+                <p class="small text-center mb-0">&copy; 2026 El Mariachi — Creado por M.CAÑETE × B.GZMN</p>
+            </div>
+        </footer>
 
-                mensaje.classList.remove("d-none");
-
-                document.getElementById("email").value = "";
-                document.getElementById("comment").value = "";
-            });
-        </script>
+        <a href="https://wa.me/56900000000" class="wsp-flotante" target="_blank" rel="noopener">
+            <i class="fa fa-whatsapp"></i> Escríbenos
+        </a>
     </body>
 </html>
