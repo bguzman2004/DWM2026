@@ -1,224 +1,136 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <title>Página Principal</title>
+        <title>El Mariachi | Comida Mexicana</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/mariachi.css">
     </head>
     <body>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-sm bg-white navbar-light shadow-sm border-bottom">
+        <nav class="navbar navbar-expand-sm navbar-mariachi">
             <div class="container-fluid">
-                <a class="navbar-brand" href="index.php">
-                    <img src="img/logo.jpg" alt="Logo" height="100">
-                </a>
+                <a class="navbar-brand brand-logo" href="index.php">El <span>Mariachi</span></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                    <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown">Empresa</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="empresa.php">Nuestro Empresa</a></li>
-                                <li><a class="dropdown-item" href="#">Nuestro Equipo</a></li>
-                                <li><a class="dropdown-item" href="#">Misión</a></li>
-                            </ul>
-                        </li>                        
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="productos.php">Productos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="servicios.php">Servicios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="contacto.php">Contacto</a>
-                        </li>
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" href="index.php">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="empresa.php">Nosotros</a></li>
+                        <li class="nav-item"><a class="nav-link" href="servicios.php">Servicios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="productos.php">Menú</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contacto.php">Contacto</a></li>
                     </ul>
                 </div>
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#myModal">Acceder</button>
+                <a href="https://wa.me/56900000000" class="btn btn-mariachi" target="_blank" rel="noopener">
+                    <i class="fa fa-whatsapp"></i> Pedir ahora
+                </a>
             </div>
         </nav>
 
         <!-- Hero -->
-        <div class="container-fluid bg-primary py-5">
-            <div class="container text-center text-white py-4">
-                <h1 class="fw-bold display-4">INFORMATICS</h1>
-                <p class="fs-4 mb-4">Transformamos ideas en soluciones tecnológicas.</p>
-                <p class="fs-5 mx-auto mb-4" style="max-width: 700px;">Somos un equipo de Ingenieros Civiles Informáticos especializados en desarrollo web, infraestructura TI, datos e inteligencia artificial.</p>
-                <a href="contacto.php" class="btn btn-light btn-lg fw-semibold">Conversemos tu proyecto →</a>
+        <div class="hero-mariachi py-5">
+            <div class="container text-center py-4">
+                <h1 class="fw-bold">Sabor auténtico de México, directo a tu mesa</h1>
+                <p class="lead mx-auto mb-4" style="max-width:640px;">Tacos, burritos y antojitos preparados al momento, con recetas de familia. Pide online o ven a visitarnos.</p>
+                <a href="productos.php" class="btn btn-mariachi btn-lg me-2">Ver menú</a>
+                <a href="https://wa.me/56900000000" class="btn btn-outline-mariachi btn-lg" style="color:#F4E9DA;border-color:#F4E9DA;" target="_blank" rel="noopener">Pedir por WhatsApp</a>
             </div>
         </div>
 
-        <!-- ¿Quiénes somos? -->
+        <!-- Categorías -->
         <div class="container my-5">
-            <div class="row align-items-center">
-                <div class="col-md-5 text-center mb-4 mb-md-0">
-                    <i class="fa fa-users" style="font-size: 140px; color:#0d6efd;"></i>
+            <h2 class="text-center fw-bold mb-2">Nuestras categorías</h2>
+            <p class="text-center text-secondary mb-5">Elige y arma tu pedido</p>
+            <div class="row g-4">
+                <div class="col-12 col-md-4">
+                    <div class="card-mariachi card-tacos text-center">
+                        <div class="icono mx-auto"><i class="fa fa-cutlery"></i></div>
+                        <h3 class="h5 fw-bold">Tacos</h3>
+                        <p class="text-secondary mb-3">Al pastor, carnitas, birria y vegetarianos.</p>
+                        <a href="productos.php#tacos" class="btn btn-outline-mariachi btn-sm">Ver tacos</a>
+                    </div>
                 </div>
-                <div class="col-md-7">
-                    <h2 class="fw-bold mb-3">¿Quiénes somos?</h2>
-                    <p class="fs-5 text-secondary">En INFORMATICS combinamos ingeniería, creatividad y tecnología para desarrollar soluciones digitales que realmente resuelven problemas. Cada proyecto nace de escuchar a nuestros clientes y transformar sus necesidades en resultados concretos.</p>
+                <div class="col-12 col-md-4">
+                    <div class="card-mariachi card-burritos text-center">
+                        <div class="icono mx-auto"><i class="fa fa-cutlery"></i></div>
+                        <h3 class="h5 fw-bold">Burritos</h3>
+                        <p class="text-secondary mb-3">Bien cargados, a tu elección de relleno.</p>
+                        <a href="productos.php#burritos" class="btn btn-outline-mariachi btn-sm">Ver burritos</a>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="card-mariachi card-bebidas text-center">
+                        <div class="icono mx-auto"><i class="fa fa-glass"></i></div>
+                        <h3 class="h5 fw-bold">Bebidas</h3>
+                        <p class="text-secondary mb-3">Aguas frescas, horchata y refrescos.</p>
+                        <a href="productos.php#bebidas" class="btn btn-outline-mariachi btn-sm">Ver bebidas</a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Resumen de Servicios -->
-        <div class="container-fluid bg-light py-5">
+        <!-- Promo -->
+        <div class="promo-banda text-center">
             <div class="container">
-                <h2 class="fw-bold text-center mb-5">Lo que hacemos</h2>
-                <!-- Los 4 íconos de esta fila se generan dinámicamente con JavaScript, ver script al final -->
-                <div class="row g-4 text-center" id="contenedorServicios"></div>
-                <div class="text-center mt-5">
-                    <a href="servicios.php" class="btn btn-primary">Ver todos los servicios →</a>
-                </div>
+                <strong>2x1 en Tacos</strong> — todos los martes, para pedidos por WhatsApp.
             </div>
         </div>
 
-        <!-- Proyectos destacados -->
+        <!-- Nosotros + Reseñas -->
         <div class="container my-5">
-            <h2 class="fw-bold text-center mb-2">Proyectos destacados</h2>
-            <p class="text-secondary text-center mb-5">Algunos trabajos que hemos desarrollado.</p>
-            <div class="row g-4" id="contenedorDestacados"></div>
-            <div class="text-center mt-5">
-                <a href="productos.php" class="btn btn-outline-primary">Ver todos los proyectos →</a>
-            </div>
-        </div>
-
-        <div class="container-fluid bg-dark py-5">
-            <div class="container text-center text-white">
-                <h2 class="fw-bold mb-3">¿Tienes un proyecto en mente?</h2>
-                <p class="fs-5 mb-4">Cuéntanos qué necesitas y encontraremos la mejor solución tecnológica para ti.</p>
-                <a href="contacto.php" class="btn btn-primary btn-lg fw-semibold">Contáctanos →</a>
+            <div class="row g-4">
+                <div class="col-12 col-md-6">
+                    <h2 class="h4 fw-bold">Sobre nosotros</h2>
+                    <p class="text-secondary">El Mariachi nació de una receta familiar y de las ganas de compartir la comida mexicana de verdad en Chile. Cada platillo se prepara al momento, con ingredientes frescos y las salsas hechas en casa.</p>
+                    <a href="empresa.php" class="btn btn-outline-mariachi btn-sm">Conócenos</a>
+                </div>
+                <div class="col-12 col-md-6">
+                    <h2 class="h4 fw-bold">Lo que dicen nuestros clientes</h2>
+                    <div class="mb-3">
+                        <div class="text-warning mb-1"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></div>
+                        <p class="text-secondary fst-italic mb-0">"Los tacos al pastor son iguales a los de México. Pedimos casi todas las semanas."</p>
+                    </div>
+                    <div>
+                        <div class="text-warning mb-1"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></div>
+                        <p class="text-secondary fst-italic mb-0">"Rapidísimo el delivery y todo llega calientito."</p>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Footer -->
-        <div class="container-fluid bg-dark border-top border-secondary">
-            <div class="row">
-                <div class="col-4"></div>
-                <div class="col-4 d-flex justify-content-center" 
-                style="color:white"><strong>© 2026 INFORMATICS                         Creado por M.CAETEMORA × B.GZMN</strong></div>
-                <div class="col-4"></div>
-            </div>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal" id="myModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Autenticar</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <footer class="footer-mariachi">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-12 col-md-4">
+                        <div class="brand-logo h5 mb-2">El <span>Mariachi</span></div>
+                        <p class="small mb-0">Comida mexicana casera, hecha al momento.</p>
                     </div>
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <form action="empresa.php">
-                            <div class="mb-2 mt-2">
-                                <label for="email" class="form-label">Correo:</label>
-                                <input type="email" class="form-control" id="email" placeholder="Ingresar Correo" name="email">
-                            </div>
-                            <div class="mb-2">
-                                <label for="pwd" class="form-label">Contraseña:</label>
-                                <input type="password" class="form-control" id="pwd" placeholder="Ingresar Contraseña" name="pswd">
-                            </div>
-                            <div class="form-check mb-2">
-                                <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="Recordarme"> Recordarme
-                                </label>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Ingresar  <i class="fa fa-check-circle"></i></button>
-                        </form>
+                    <div class="col-12 col-md-4">
+                        <div class="fw-bold mb-2">Síguenos</div>
+                        <a href="#" class="me-3"><i class="fa fa-facebook fa-lg"></i></a>
+                        <a href="#" class="me-3"><i class="fa fa-instagram fa-lg"></i></a>
+                        <a href="https://wa.me/56900000000" target="_blank" rel="noopener"><i class="fa fa-whatsapp fa-lg"></i></a>
                     </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    <div class="col-12 col-md-4">
+                        <div class="fw-bold mb-2">Horario</div>
+                        <p class="small mb-0">Mar–Dom, 12:00–22:00<br>Lunes cerrado</p>
                     </div>
                 </div>
+                <hr>
+                <p class="small text-center mb-0">&copy; 2026 El Mariachi — Creado por M.CAÑETE × B.GZMN</p>
             </div>
-        </div>
+        </footer>
 
-        <script>
-            const resumenServicios = [
-                { icono: "fa-code", titulo: "Desarrollo Web", descripcion: "Páginas modernas, rápidas y responsivas." },
-                { icono: "fa-server", titulo: "Infraestructura TI", descripcion: "Redes y sistemas configurados a medida." },
-                { icono: "fa-bar-chart", titulo: "Minería de Datos", descripcion: "Información útil para decidir mejor." },
-                { icono: "fa-cogs", titulo: "Inteligencia Artificial", descripcion: "Automatización y aprendizaje aplicado." }
-            ];
-
-            const contenedorServicios = document.getElementById("contenedorServicios");
-
-            resumenServicios.forEach((item) => {
-                let col = document.createElement("div");
-                col.setAttribute("class", "col-md-3");
-
-                let icono = document.createElement("i");
-                icono.setAttribute("class", "fa " + item.icono + " fs-1 text-primary mb-3");
-
-                let titulo = document.createElement("h5");
-                titulo.setAttribute("class", "fw-bold");
-                titulo.innerText = item.titulo;
-
-                let descripcion = document.createElement("p");
-                descripcion.setAttribute("class", "text-secondary");
-                descripcion.innerText = item.descripcion;
-
-                col.appendChild(icono);
-                col.appendChild(titulo);
-                col.appendChild(descripcion);
-
-                contenedorServicios.appendChild(col);
-            });
-
-            const proyectosDestacados = [
-                { nombre: "TiendaExpress", descripcion: "Tienda online con carrito de compras y pasarela de pago.", icono: "fa-shopping-cart" },
-                { nombre: "Clínica Salud+", descripcion: "Sistema de agendamiento de horas médicas en línea.", icono: "fa-heartbeat" },
-                { nombre: "RestoGourmet", descripcion: "Reservas online con menú digital y confirmación automática.", icono: "fa-cutlery" }
-            ];
-
-            const contenedorDestacados = document.getElementById("contenedorDestacados");
-
-            proyectosDestacados.forEach((proyecto) => {
-                let col = document.createElement("div");
-                col.setAttribute("class", "col-md-4");
-
-                let card = document.createElement("div");
-                card.setAttribute("class", "card h-100 border-0 shadow-sm");
-
-                let cajaIcono = document.createElement("div");
-                cajaIcono.setAttribute("class", "d-flex align-items-center justify-content-center bg-light");
-                cajaIcono.style.height = "150px";
-
-                let icono = document.createElement("i");
-                icono.setAttribute("class", "fa " + proyecto.icono);
-                icono.style.fontSize = "60px";
-                icono.style.color = "#0d6efd";
-                cajaIcono.appendChild(icono);
-
-                let cardBody = document.createElement("div");
-                cardBody.setAttribute("class", "card-body");
-
-                let titulo = document.createElement("h5");
-                titulo.setAttribute("class", "card-title fw-bold");
-                titulo.innerText = proyecto.nombre;
-
-                let descripcion = document.createElement("p");
-                descripcion.setAttribute("class", "card-text text-secondary");
-                descripcion.innerText = proyecto.descripcion;
-
-                cardBody.appendChild(titulo);
-                cardBody.appendChild(descripcion);
-
-                card.appendChild(cajaIcono);
-                card.appendChild(cardBody);
-                col.appendChild(card);
-
-                contenedorDestacados.appendChild(col);
-            });
-        </script>
+        <a href="https://wa.me/56900000000" class="wsp-flotante" target="_blank" rel="noopener">
+            <i class="fa fa-whatsapp"></i> Escríbenos
+        </a>
     </body>
 </html>
