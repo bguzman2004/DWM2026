@@ -172,5 +172,19 @@
         <a href="https://wa.me/56900000000" class="wsp-flotante" target="_blank" rel="noopener">
             <i class="fa fa-whatsapp"></i> Escríbenos
         </a>
+
+        <script>
+            // Si llegamos con un #hash (ej. productos.php#burritos desde index.php),
+            // activa esa pestaña del menú en vez de dejar siempre "Tacos" seleccionada.
+            document.addEventListener("DOMContentLoaded", function () {
+                const hash = window.location.hash;
+                if (hash) {
+                    const boton = document.querySelector('#menuTabs button[data-bs-target="' + hash + '"]');
+                    if (boton) {
+                        new bootstrap.Tab(boton).show();
+                    }
+                }
+            });
+        </script>
     </body>
 </html>
