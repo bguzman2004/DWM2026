@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Mariachi - Comida Mexicana</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">EL MARIACHI</div>
+        <div class="social-icons">
+            <a href="#" aria-label="Facebook">FB</a>
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="WhatsApp">WA</a>
+        </div>
+    </header>
+
+    <!-- Contenido principal: video/foto + columna derecha -->
+    <main class="main-grid">
+
+        <section class="promo-video">
+            <div class="play-icon">&#9658;</div>
+            <p>VIDEO / FOTO PROMOCIONAL</p>
+        </section>
+
+        <aside class="right-col">
+            <div class="ad-banner" id="promoDelDia">
+                PROMOCIÓN DEL DÍA
+            </div>
+
+            <div class="chat-box">
+                <h3>Pedido Rápido</h3>
+                <form id="formPedido">
+                    <select id="selectPlatillo" required>
+                        <option value="">Elige un platillo...</option>
+                    </select>
+                    <input type="text" id="nombreCliente" placeholder="Tu nombre" required>
+                    <button type="submit">Enviar Pedido</button>
+                </form>
+                <p id="mensajePedido" class="mensaje-pedido"></p>
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- Menú -->
+    <section class="menu-section">
+        <div class="tabs">
+            <button class="tab-btn active" data-categoria="Todos">Menú</button>
+            <button class="tab-btn" data-categoria="Nosotros">Nosotros</button>
+        </div>
+
+        <div id="menuContenido">
+            <ul id="listaMenu" class="menu-list"></ul>
+        </div>
+
+        <div id="nosotrosContenido" class="nosotros hidden">
+            <p>En El Mariachi llevamos la auténtica cocina mexicana a tu mesa: tacos, burritos y nachos preparados con recetas tradicionales.</p>
+        </div>
+    </section>
+
+    <!-- Promociones y redes -->
+    <section class="bottom-grid">
+        <div class="ad-banner promo2">
+            PROMO 2x1 EN TACOS
+        </div>
+
+        <div class="mini-banners">
+            <div class="mini-banner">SÍGUENOS EN<br>INSTAGRAM</div>
+            <div class="mini-banner">RESEÑAS EN<br>GOOGLE</div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 El Mariachi - Comida Mexicana</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
