@@ -4,6 +4,7 @@
     --verde-palta: #4C6444;
     --amarillo-mostaza: #E4A93B;
     --carbon: #2B2B2B;
+    --error: #c0392b;
 }
 
 * {
@@ -16,16 +17,23 @@ body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background-color: #ffffff;
     color: var(--carbon);
+    line-height: 1.5;
 }
 
-/* Header */
+.hidden {
+    display: none !important;
+}
+
+/* Header y navegación */
 .header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     background-color: var(--crema);
     border-bottom: 3px solid var(--rojo-chile);
     padding: 15px 20px;
+    gap: 10px;
 }
 
 .logo {
@@ -35,9 +43,42 @@ body {
     letter-spacing: 1px;
 }
 
+.nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.nav-btn {
+    background: white;
+    border: 1px solid var(--verde-palta);
+    color: var(--verde-palta);
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-btn.active,
+.nav-btn:hover {
+    background: var(--verde-palta);
+    color: white;
+}
+
+.badge {
+    background: var(--rojo-chile);
+    color: white;
+    border-radius: 50%;
+    padding: 1px 7px;
+    font-size: 0.75rem;
+    margin-left: 4px;
+}
+
 .social-icons a {
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 8px;
     text-decoration: none;
     background: white;
     border: 1px solid var(--rojo-chile);
@@ -48,126 +89,102 @@ body {
     font-weight: bold;
 }
 
-/* Grid principal */
-.main-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-    padding: 15px;
+/* Layout general de vistas */
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 15px;
 }
 
-.promo-video {
+.vista h2 {
+    color: var(--rojo-chile);
+    margin-bottom: 15px;
+}
+
+/* Vista Inicio */
+.hero {
     background-color: var(--verde-palta);
     color: white;
-    min-height: 220px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
+    border-radius: 10px;
+    padding: 40px 20px;
     text-align: center;
-    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    margin: 10px 0;
 }
 
 .play-icon {
-    font-size: 2.5rem;
+    font-size: 2rem;
     background: white;
     color: var(--verde-palta);
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
+    margin: 0 auto 10px;
 }
 
-.right-col {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.btn-primario {
+    background-color: var(--rojo-chile);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 1rem;
+    transition: opacity 0.2s;
+}
+
+.btn-primario:hover {
+    opacity: 0.85;
 }
 
 .ad-banner {
     background-color: var(--amarillo-mostaza);
     border-radius: 8px;
-    padding: 20px;
+    padding: 18px;
     text-align: center;
     font-weight: bold;
-    color: var(--carbon);
 }
 
-.chat-box {
-    background-color: var(--rojo-chile);
-    color: white;
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.chat-box h3 {
-    margin-bottom: 12px;
-    text-align: center;
-}
-
-.chat-box form {
+/* Vista Menú */
+.menu-controles {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-bottom: 15px;
 }
 
-.chat-box select,
-.chat-box input {
+.menu-controles input[type="search"] {
     padding: 10px;
     border-radius: 6px;
-    border: none;
+    border: 1px solid #ccc;
     font-size: 0.95rem;
 }
 
-.chat-box button {
-    background-color: var(--carbon);
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-.chat-box button:hover {
-    opacity: 0.85;
-}
-
-.mensaje-pedido {
-    margin-top: 10px;
-    font-size: 0.85rem;
-    text-align: center;
-    min-height: 1.2em;
-}
-
-/* Menú */
-.menu-section {
-    padding: 15px;
-}
-
-.tabs {
+.filtros {
     display: flex;
-    border-bottom: 2px solid var(--verde-palta);
-    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
-.tab-btn {
+.filtro-btn {
     background: var(--crema);
-    border: none;
-    padding: 10px 18px;
-    cursor: pointer;
-    font-weight: bold;
+    border: 1px solid var(--verde-palta);
     color: var(--carbon);
-    border-radius: 6px 6px 0 0;
-    margin-right: 4px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
 }
 
-.tab-btn.active {
+.filtro-btn.active {
     background: var(--verde-palta);
     color: white;
 }
@@ -179,40 +196,158 @@ body {
 .menu-list li {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
+    align-items: center;
+    padding: 12px;
     border-bottom: 1px dashed #ccc;
-    font-size: 0.95rem;
+    gap: 10px;
 }
 
-.menu-list li span.precio {
+.menu-list .info-platillo {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-list .categoria-tag {
+    font-size: 0.75rem;
+    color: var(--verde-palta);
+    font-weight: bold;
+}
+
+.menu-list .precio {
     font-weight: bold;
     color: var(--rojo-chile);
+    white-space: nowrap;
 }
 
-.nosotros {
-    padding: 10px 0;
-    line-height: 1.6;
+.btn-agregar {
+    background: var(--verde-palta);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
 }
 
-.hidden {
-    display: none;
+.sin-resultados {
+    text-align: center;
+    color: #888;
+    padding: 20px;
 }
 
-/* Promociones inferiores */
-.bottom-grid {
+/* Vista Pedido */
+.carrito-resumen {
+    background: var(--crema);
+    border-radius: 8px;
     padding: 15px;
-    display: grid;
-    gap: 15px;
+    margin-bottom: 20px;
 }
 
-.promo2 {
-    background-color: var(--amarillo-mostaza);
+.carrito-lista {
+    list-style: none;
 }
 
+.carrito-lista li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.9rem;
+}
+
+.carrito-lista button.quitar {
+    background: var(--error);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3px 8px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    margin-left: 10px;
+}
+
+.carrito-total {
+    text-align: right;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 1.05rem;
+}
+
+fieldset {
+    border: 1px solid var(--verde-palta);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+legend {
+    font-weight: bold;
+    color: var(--verde-palta);
+    padding: 0 6px;
+}
+
+.campo {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.campo label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.campo input,
+.campo textarea {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.campo input.input-error,
+.campo textarea.input-error {
+    border-color: var(--error);
+    background-color: #fdecea;
+}
+
+.error {
+    color: var(--error);
+    font-size: 0.8rem;
+    min-height: 1em;
+}
+
+.contador {
+    font-size: 0.75rem;
+    color: #888;
+    text-align: right;
+}
+
+/* Vista Confirmación */
+.confirmacion {
+    background: var(--crema);
+    border-radius: 10px;
+    padding: 25px;
+    border: 2px solid var(--verde-palta);
+}
+
+.confirmacion h2 {
+    color: var(--verde-palta);
+}
+
+.confirmacion p {
+    margin: 6px 0;
+}
+
+/* Nosotros */
 .mini-banners {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    margin-top: 20px;
 }
 
 .mini-banner {
@@ -233,26 +368,26 @@ body {
     font-size: 0.85rem;
 }
 
-/* Responsivo: tablets y escritorio */
-@media (min-width: 768px) {
-    .main-grid {
-        grid-template-columns: 1fr 1fr;
+/* Responsivo */
+@media (min-width: 600px) {
+    .menu-controles {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
     }
 
-    .bottom-grid {
-        grid-template-columns: 2fr 1fr;
-        align-items: start;
+    .menu-controles input[type="search"] {
+        flex: 1;
+        min-width: 200px;
+    }
+}
+
+@media (min-width: 768px) {
+    .header {
+        flex-wrap: nowrap;
     }
 
     .mini-banners {
         grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (min-width: 1024px) {
-    .header, .main-grid, .menu-section, .bottom-grid {
-        max-width: 1100px;
-        margin: 0 auto;
-        width: 100%;
     }
 }
