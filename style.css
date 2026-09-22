@@ -81,7 +81,13 @@ h1, h2, h3, .logo {
 
 /* ===== Hero ===== */
 .hero {
-    background: linear-gradient(135deg, var(--verde-palta), #2f4030);
+    background:
+        linear-gradient(rgba(20,15,10,0.55), rgba(20,15,10,0.4)),
+        url('img/hero-tacos.webp') center/cover no-repeat;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .hero h1 {
@@ -161,6 +167,20 @@ h1, h2, h3, .logo {
 .btn-mostaza:hover {
     opacity: 0.9;
     color: var(--carbon);
+}
+
+/* ===== Foto destacada (franja bajo el hero) ===== */
+.foto-destacada {
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+.foto-destacada img {
+    width: 100%;
+    max-height: 340px;
+    object-fit: cover;
+    display: block;
 }
 
 .ad-banner {
