@@ -8,9 +8,19 @@
 </head>
 <body>
 
-    <!-- Header -->
+    <!-- Header con navegación -->
     <header class="header">
         <div class="logo">EL MARIACHI</div>
+
+        <nav class="nav">
+            <button class="nav-btn active" data-vista="inicio">Inicio</button>
+            <button class="nav-btn" data-vista="menu">Menú</button>
+            <button class="nav-btn" data-vista="pedido">
+                Pedido <span id="carritoContador" class="badge">0</span>
+            </button>
+            <button class="nav-btn" data-vista="nosotros">Nosotros</button>
+        </nav>
+
         <div class="social-icons">
             <a href="#" aria-label="Facebook">FB</a>
             <a href="#" aria-label="Instagram">IG</a>
@@ -18,61 +28,117 @@
         </div>
     </header>
 
-    <!-- Contenido principal: video/foto + columna derecha -->
-    <main class="main-grid">
+    <main>
 
-        <section class="promo-video">
-            <div class="play-icon">&#9658;</div>
-            <p>VIDEO / FOTO PROMOCIONAL</p>
+        <!-- VISTA: INICIO -->
+        <section id="vista-inicio" class="vista">
+            <div class="hero">
+                <div class="play-icon">&#9658;</div>
+                <h1>Auténtica comida mexicana</h1>
+                <p>Tacos, burritos y nachos preparados como en casa.</p>
+                <button class="btn-primario" id="btnVerMenu">Ver Menú</button>
+            </div>
+
+            <div class="ad-banner" id="promoDelDia">
+                PROMOCIÓN DEL DÍA: 2x1 en Tacos al Pastor
+            </div>
         </section>
 
-        <aside class="right-col">
-            <div class="ad-banner" id="promoDelDia">
-                PROMOCIÓN DEL DÍA
+        <!-- VISTA: MENÚ -->
+        <section id="vista-menu" class="vista hidden">
+            <h2>Nuestro Menú</h2>
+
+            <div class="menu-controles">
+                <label for="buscarPlatillo">Buscar:</label>
+                <input type="search" id="buscarPlatillo" placeholder="Ej: tacos...">
+
+                <div class="filtros" id="filtrosCategoria">
+                    <button class="filtro-btn active" data-cat="Todos">Todos</button>
+                    <button class="filtro-btn" data-cat="Tacos">Tacos</button>
+                    <button class="filtro-btn" data-cat="Burritos">Burritos</button>
+                    <button class="filtro-btn" data-cat="Nachos">Nachos</button>
+                    <button class="filtro-btn" data-cat="Otros">Otros</button>
+                </div>
             </div>
 
-            <div class="chat-box">
-                <h3>Pedido Rápido</h3>
-                <form id="formPedido">
-                    <select id="selectPlatillo" required>
-                        <option value="">Elige un platillo...</option>
-                    </select>
-                    <input type="text" id="nombreCliente" placeholder="Tu nombre" required>
-                    <button type="submit">Enviar Pedido</button>
-                </form>
-                <p id="mensajePedido" class="mensaje-pedido"></p>
+            <ul id="listaMenu" class="menu-list"></ul>
+            <p id="sinResultados" class="sin-resultados hidden">No se encontraron platillos.</p>
+        </section>
+
+        <!-- VISTA: PEDIDO -->
+        <section id="vista-pedido" class="vista hidden">
+            <h2>Tu Pedido</h2>
+
+            <article id="carritoResumen" class="carrito-resumen">
+                <p id="carritoVacioMsg">Aún no has agregado platillos. Ve al Menú y agrega alguno.</p>
+                <ul id="carritoLista" class="carrito-lista"></ul>
+                <p class="carrito-total">Total: <span id="carritoTotal">$0</span></p>
+            </article>
+
+            <form id="formPedido" novalidate>
+                <fieldset>
+                    <legend>Datos de contacto</legend>
+
+                    <div class="campo">
+                        <label for="nombreCliente">Nombre completo *</label>
+                        <input type="text" id="nombreCliente" name="nombreCliente" placeholder="Ej: Benjamín Guzmán">
+                        <span class="error" id="errorNombre"></span>
+                    </div>
+
+                    <div class="campo">
+                        <label for="telefonoCliente">Teléfono *</label>
+                        <input type="tel" id="telefonoCliente" name="telefonoCliente" placeholder="Ej: 912345678">
+                        <span class="error" id="errorTelefono"></span>
+                    </div>
+
+                    <div class="campo">
+                        <label for="emailCliente">Email (opcional)</label>
+                        <input type="email" id="emailCliente" name="emailCliente" placeholder="Ej: correo@ejemplo.com">
+                        <span class="error" id="errorEmail"></span>
+                    </div>
+
+                    <div class="campo">
+                        <label for="notasCliente">Notas para tu pedido</label>
+                        <textarea id="notasCliente" name="notasCliente" maxlength="200" rows="3" placeholder="Ej: sin cebolla, agregar más salsa..."></textarea>
+                        <span class="contador" id="contadorNotas">0/200</span>
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="btn-primario">Confirmar Pedido</button>
+            </form>
+        </section>
+
+        <!-- VISTA: CONFIRMACIÓN -->
+        <section id="vista-confirmacion" class="vista hidden">
+            <div class="confirmacion">
+                <h2>¡Pedido Confirmado! ✅</h2>
+                <p>Número de orden: <strong id="confNumero"></strong></p>
+                <p>Fecha: <span id="confFecha"></span></p>
+                <p>Cliente: <span id="confCliente"></span></p>
+                <p>Teléfono: <span id="confTelefono"></span></p>
+
+                <ul id="confItems" class="carrito-lista"></ul>
+                <p class="carrito-total">Total: <span id="confTotal"></span></p>
+
+                <button class="btn-primario" id="btnNuevoPedido">Hacer otro pedido</button>
             </div>
-        </aside>
+        </section>
+
+        <!-- VISTA: NOSOTROS -->
+        <section id="vista-nosotros" class="vista hidden">
+            <h2>Nosotros</h2>
+            <article>
+                <p>En El Mariachi llevamos la auténtica cocina mexicana a tu mesa: tacos, burritos y nachos preparados con recetas tradicionales, ingredientes frescos y mucho cariño.</p>
+                <p>Fundado por un equipo apasionado por la comida mexicana real, buscamos que cada visita se sienta como una fiesta.</p>
+            </article>
+
+            <div class="mini-banners">
+                <div class="mini-banner">SÍGUENOS EN<br>INSTAGRAM</div>
+                <div class="mini-banner">RESEÑAS EN<br>GOOGLE</div>
+            </div>
+        </section>
 
     </main>
-
-    <!-- Menú -->
-    <section class="menu-section">
-        <div class="tabs">
-            <button class="tab-btn active" data-categoria="Todos">Menú</button>
-            <button class="tab-btn" data-categoria="Nosotros">Nosotros</button>
-        </div>
-
-        <div id="menuContenido">
-            <ul id="listaMenu" class="menu-list"></ul>
-        </div>
-
-        <div id="nosotrosContenido" class="nosotros hidden">
-            <p>En El Mariachi llevamos la auténtica cocina mexicana a tu mesa: tacos, burritos y nachos preparados con recetas tradicionales.</p>
-        </div>
-    </section>
-
-    <!-- Promociones y redes -->
-    <section class="bottom-grid">
-        <div class="ad-banner promo2">
-            PROMO 2x1 EN TACOS
-        </div>
-
-        <div class="mini-banners">
-            <div class="mini-banner">SÍGUENOS EN<br>INSTAGRAM</div>
-            <div class="mini-banner">RESEÑAS EN<br>GOOGLE</div>
-        </div>
-    </section>
 
     <footer class="footer">
         <p>&copy; 2026 El Mariachi - Comida Mexicana</p>
