@@ -2,22 +2,33 @@
 // DATOS DEL MENÚ
 // ============================
 const menu = [
-    { id: 1, nombre: "Tacos al Pastor", categoria: "Tacos", precio: 2500, icono: "fa-solid fa-pepper-hot" },
-    { id: 2, nombre: "Burrito Especial", categoria: "Burritos", precio: 4500, icono: "fa-solid fa-bacon" },
-    { id: 3, nombre: "Nachos Supreme", categoria: "Nachos", precio: 3500, icono: "fa-solid fa-cheese" },
-    { id: 4, nombre: "Quesadilla Mixta", categoria: "Otros", precio: 3200, icono: "fa-solid fa-utensils" }
+    { id: 1, nombre: "Tacos al Pastor", categoria: "Tacos", precio: 2500, descripcion: "Cerdo marinado, piña, cebolla y cilantro.", icono: "fa-solid fa-pepper-hot" },
+    { id: 2, nombre: "Tacos de Carnitas", categoria: "Tacos", precio: 2500, descripcion: "Cerdo cocido lento, salsa verde.", icono: "fa-solid fa-pepper-hot" },
+    { id: 3, nombre: "Tacos de Birria", categoria: "Tacos", precio: 3000, descripcion: "Res braseada, consomé para remojar.", icono: "fa-solid fa-pepper-hot" },
+    { id: 4, nombre: "Burrito Especial", categoria: "Burritos", precio: 4500, descripcion: "Arroz, frijoles, carne asada, queso y salsa.", icono: "fa-solid fa-bacon" },
+    { id: 5, nombre: "Burrito de Pollo", categoria: "Burritos", precio: 4200, descripcion: "Pollo asado, arroz, frijoles y pico de gallo.", icono: "fa-solid fa-bacon" },
+    { id: 6, nombre: "Burrito Vegetariano", categoria: "Burritos", precio: 4000, descripcion: "Frijoles, arroz, verduras salteadas, queso.", icono: "fa-solid fa-bacon" },
+    { id: 7, nombre: "Nachos Supreme", categoria: "Nachos", precio: 3500, descripcion: "Queso derretido, jalapeños, pico de gallo, guacamole.", icono: "fa-solid fa-cheese" },
+    { id: 8, nombre: "Nachos con Carne", categoria: "Nachos", precio: 4200, descripcion: "Carne molida sazonada, queso, guacamole.", icono: "fa-solid fa-cheese" },
+    { id: 9, nombre: "Agua de Horchata", categoria: "Bebidas", precio: 1800, descripcion: "Arroz, canela y vainilla.", icono: "fa-solid fa-mug-saucer" },
+    { id: 10, nombre: "Agua de Jamaica", categoria: "Bebidas", precio: 1800, descripcion: "Flor de jamaica, refrescante y natural.", icono: "fa-solid fa-mug-saucer" },
+    { id: 11, nombre: "Quesadilla Mixta", categoria: "Otros", precio: 3200, descripcion: "Queso, pollo y pimientos gratinados.", icono: "fa-solid fa-utensils" },
+    { id: 12, nombre: "Elote Preparado", categoria: "Otros", precio: 2000, descripcion: "Mayonesa, queso rallado y chile en polvo.", icono: "fa-solid fa-utensils" }
 ];
 
 const claseImagenPorCategoria = {
     "Tacos": "img-tacos",
     "Burritos": "img-burritos",
     "Nachos": "img-nachos",
+    "Bebidas": "img-bebidas",
     "Otros": "img-otros"
 };
 
 // Carrito en memoria (no usa backend, solo estado local del navegador)
 let carrito = [];
 let filtroCategoriaActual = "Todos";
+let platilloSeleccionado = null;
+let cantidadDetalle = 1;
 
 // ============================
 // NAVEGACIÓN ENTRE VISTAS
@@ -78,6 +89,12 @@ function renderMenu() {
 
         const card = document.createElement("div");
         card.classList.add("platillo-card");
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.addEventListener("click", () => mostrarDetalle(platillo));
+        card.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") mostrarDetalle(platillo);
+        });
 
         const imagen = document.createElement("div");
         imagen.classList.add("platillo-imagen", claseImagenPorCategoria[platillo.categoria]);
@@ -95,6 +112,10 @@ function renderMenu() {
         const titulo = document.createElement("h3");
         titulo.textContent = platillo.nombre;
 
+        const descripcion = document.createElement("p");
+        descripcion.classList.add("platillo-descripcion");
+        descripcion.textContent = platillo.descripcion;
+
         const precio = document.createElement("p");
         precio.classList.add("platillo-precio");
         precio.textContent = `$${platillo.precio.toLocaleString("es-CL")}`;
@@ -102,10 +123,14 @@ function renderMenu() {
         const btnAgregar = document.createElement("button");
         btnAgregar.classList.add("btn-agregar");
         btnAgregar.innerHTML = `<i class="fa-solid fa-cart-plus"></i> Agregar`;
-        btnAgregar.addEventListener("click", () => agregarAlCarrito(platillo));
+        btnAgregar.addEventListener("click", (e) => {
+            e.stopPropagation(); // no abrir el detalle, es un agregado rápido
+            agregarAlCarrito(platillo, 1);
+        });
 
         body.appendChild(catTag);
         body.appendChild(titulo);
+        body.appendChild(descripcion);
         body.appendChild(precio);
         body.appendChild(btnAgregar);
 
@@ -132,15 +157,63 @@ function initFiltrosYBusqueda() {
 // ============================
 // CARRITO
 // ============================
-function agregarAlCarrito(platillo) {
+function agregarAlCarrito(platillo, cantidad = 1) {
     const existente = carrito.find((item) => item.id === platillo.id);
     if (existente) {
-        existente.cantidad += 1;
+        existente.cantidad += cantidad;
     } else {
-        carrito.push({ ...platillo, cantidad: 1 });
+        carrito.push({ ...platillo, cantidad });
     }
     renderCarrito();
     mostrarVista("pedido");
+}
+
+// ============================
+// VISTA DETALLE PRODUCTO (Menú -> Detalle -> Carrito, como en el boceto)
+// ============================
+function mostrarDetalle(platillo) {
+    platilloSeleccionado = platillo;
+    cantidadDetalle = 1;
+    renderDetalle();
+    mostrarVista("detalle");
+}
+
+function renderDetalle() {
+    if (!platilloSeleccionado) return;
+
+    const imagen = document.getElementById("detalleImagen");
+    imagen.className = `detalle-imagen ${claseImagenPorCategoria[platilloSeleccionado.categoria]}`;
+    imagen.innerHTML = `<i class="${platilloSeleccionado.icono}"></i>`;
+
+    document.getElementById("detalleCategoria").textContent = platilloSeleccionado.categoria;
+    document.getElementById("detalleNombre").textContent = platilloSeleccionado.nombre;
+    document.getElementById("detalleDescripcion").textContent = platilloSeleccionado.descripcion;
+    document.getElementById("detallePrecioUnitario").textContent = `$${platilloSeleccionado.precio.toLocaleString("es-CL")} c/u`;
+    document.getElementById("detalleCantidad").textContent = cantidadDetalle;
+    document.getElementById("detalleSubtotal").textContent =
+        `$${(platilloSeleccionado.precio * cantidadDetalle).toLocaleString("es-CL")}`;
+}
+
+function initDetalle() {
+    document.getElementById("detalleMenos").addEventListener("click", () => {
+        if (cantidadDetalle > 1) {
+            cantidadDetalle -= 1;
+            renderDetalle();
+        }
+    });
+
+    document.getElementById("detalleMas").addEventListener("click", () => {
+        cantidadDetalle += 1;
+        renderDetalle();
+    });
+
+    document.getElementById("btnAgregarDesdeDetalle").addEventListener("click", () => {
+        agregarAlCarrito(platilloSeleccionado, cantidadDetalle);
+    });
+
+    document.getElementById("btnVolverAlMenu").addEventListener("click", () => {
+        mostrarVista("menu");
+    });
 }
 
 function quitarDelCarrito(id) {
@@ -304,6 +377,22 @@ function initFormPedido() {
 }
 
 // ============================
+// PEDIDO RÁPIDO (cotización directa, sin pasar por el menú completo)
+// ============================
+function initPedidoRapido() {
+    const form = document.getElementById("formPedidoRapido");
+    form.addEventListener("submit", (evento) => {
+        evento.preventDefault();
+        const mensaje = document.getElementById("mensajeRapido").value.trim();
+        if (mensaje === "") return;
+
+        const texto = encodeURIComponent(`Hola El Mariachi, quiero cotizar: ${mensaje}`);
+        window.open(`https://wa.me/56900000000?text=${texto}`, "_blank", "noopener");
+        form.reset();
+    });
+}
+
+// ============================
 // INICIALIZACIÓN
 // ============================
 document.addEventListener("DOMContentLoaded", () => {
@@ -313,4 +402,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCarrito();
     initContadorNotas();
     initFormPedido();
+    initDetalle();
+    initPedidoRapido();
 });
