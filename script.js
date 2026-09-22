@@ -2,11 +2,18 @@
 // DATOS DEL MENÚ
 // ============================
 const menu = [
-    { id: 1, nombre: "Tacos al Pastor", categoria: "Tacos", precio: 2500 },
-    { id: 2, nombre: "Burrito Especial", categoria: "Burritos", precio: 4500 },
-    { id: 3, nombre: "Nachos Supreme", categoria: "Nachos", precio: 3500 },
-    { id: 4, nombre: "Quesadilla Mixta", categoria: "Otros", precio: 3200 }
+    { id: 1, nombre: "Tacos al Pastor", categoria: "Tacos", precio: 2500, icono: "fa-solid fa-pepper-hot" },
+    { id: 2, nombre: "Burrito Especial", categoria: "Burritos", precio: 4500, icono: "fa-solid fa-bacon" },
+    { id: 3, nombre: "Nachos Supreme", categoria: "Nachos", precio: 3500, icono: "fa-solid fa-cheese" },
+    { id: 4, nombre: "Quesadilla Mixta", categoria: "Otros", precio: 3200, icono: "fa-solid fa-utensils" }
 ];
+
+const claseImagenPorCategoria = {
+    "Tacos": "img-tacos",
+    "Burritos": "img-burritos",
+    "Nachos": "img-nachos",
+    "Otros": "img-otros"
+};
 
 // Carrito en memoria (no usa backend, solo estado local del navegador)
 let carrito = [];
@@ -24,11 +31,22 @@ function mostrarVista(nombreVista) {
     document.querySelectorAll(".nav-btn").forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.vista === nombreVista);
     });
+
+    // Cierra el menú colapsable de Bootstrap en mobile al navegar
+    const navCollapse = document.getElementById("navMenu");
+    if (navCollapse.classList.contains("show")) {
+        bootstrap.Collapse.getOrCreateInstance(navCollapse).hide();
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function initNavegacion() {
-    document.querySelectorAll(".nav-btn").forEach((btn) => {
-        btn.addEventListener("click", () => mostrarVista(btn.dataset.vista));
+    document.querySelectorAll("[data-vista]").forEach((el) => {
+        el.addEventListener("click", (e) => {
+            e.preventDefault();
+            mostrarVista(el.dataset.vista);
+        });
     });
 
     document.getElementById("btnVerMenu").addEventListener("click", () => {
@@ -52,41 +70,49 @@ function renderMenu() {
         return coincideCategoria && coincideBusqueda;
     });
 
-    if (platillosFiltrados.length === 0) {
-        sinResultados.classList.remove("hidden");
-    } else {
-        sinResultados.classList.add("hidden");
-    }
+    sinResultados.classList.toggle("hidden", platillosFiltrados.length !== 0);
 
     platillosFiltrados.forEach((platillo) => {
-        const li = document.createElement("li");
+        const col = document.createElement("div");
+        col.classList.add("col-sm-6", "col-lg-4");
 
-        const infoDiv = document.createElement("div");
-        infoDiv.classList.add("info-platillo");
+        const card = document.createElement("div");
+        card.classList.add("platillo-card");
 
-        const nombreSpan = document.createElement("span");
-        nombreSpan.textContent = platillo.nombre;
+        const imagen = document.createElement("div");
+        imagen.classList.add("platillo-imagen", claseImagenPorCategoria[platillo.categoria]);
+        const iconoImg = document.createElement("i");
+        iconoImg.className = platillo.icono;
+        imagen.appendChild(iconoImg);
 
-        const catSpan = document.createElement("span");
-        catSpan.classList.add("categoria-tag");
-        catSpan.textContent = platillo.categoria;
+        const body = document.createElement("div");
+        body.classList.add("platillo-body");
 
-        infoDiv.appendChild(nombreSpan);
-        infoDiv.appendChild(catSpan);
+        const catTag = document.createElement("span");
+        catTag.classList.add("categoria-tag");
+        catTag.textContent = platillo.categoria;
 
-        const precioSpan = document.createElement("span");
-        precioSpan.classList.add("precio");
-        precioSpan.textContent = `$${platillo.precio.toLocaleString("es-CL")}`;
+        const titulo = document.createElement("h3");
+        titulo.textContent = platillo.nombre;
+
+        const precio = document.createElement("p");
+        precio.classList.add("platillo-precio");
+        precio.textContent = `$${platillo.precio.toLocaleString("es-CL")}`;
 
         const btnAgregar = document.createElement("button");
         btnAgregar.classList.add("btn-agregar");
-        btnAgregar.textContent = "Agregar";
+        btnAgregar.innerHTML = `<i class="fa-solid fa-cart-plus"></i> Agregar`;
         btnAgregar.addEventListener("click", () => agregarAlCarrito(platillo));
 
-        li.appendChild(infoDiv);
-        li.appendChild(precioSpan);
-        li.appendChild(btnAgregar);
-        listaMenu.appendChild(li);
+        body.appendChild(catTag);
+        body.appendChild(titulo);
+        body.appendChild(precio);
+        body.appendChild(btnAgregar);
+
+        card.appendChild(imagen);
+        card.appendChild(body);
+        col.appendChild(card);
+        listaMenu.appendChild(col);
     });
 }
 
@@ -133,12 +159,7 @@ function renderCarrito() {
     const contador = document.getElementById("carritoContador");
 
     lista.innerHTML = "";
-
-    if (carrito.length === 0) {
-        vacioMsg.classList.remove("hidden");
-    } else {
-        vacioMsg.classList.add("hidden");
-    }
+    vacioMsg.classList.toggle("hidden", carrito.length !== 0);
 
     carrito.forEach((item) => {
         const li = document.createElement("li");
@@ -168,7 +189,6 @@ function validarNombre(valor) {
 }
 
 function validarTelefono(valor) {
-    // Acepta formatos como 912345678, +56912345678, 9 1234 5678
     const regex = /^(\+?56)?\s?9\d{8}$/;
     return regex.test(valor.replace(/\s/g, ""));
 }
@@ -257,7 +277,6 @@ function initFormPedido() {
         const nombre = document.getElementById("nombreCliente").value.trim();
         const telefono = document.getElementById("telefonoCliente").value.trim();
 
-        // Rellena la vista de confirmación con los datos reales (manipulación del DOM)
         document.getElementById("confNumero").textContent = generarNumeroOrden();
         document.getElementById("confFecha").textContent = new Date().toLocaleString("es-CL");
         document.getElementById("confCliente").textContent = nombre;
