@@ -1,6 +1,6 @@
 import os
-import secrets
 import httpx
+
 from fastapi import (
     FastAPI,
     Depends,
@@ -13,20 +13,23 @@ from fastapi.security import (
     HTTPAuthorizationCredentials
 )
 
-app = FastAPI(
-    title="El Mariachi - API Gateway",
-    description="API Gateway con Vault y Bearer Token"
-)
+app = FastAPI(title="El Mariachi - API Gateway")
 
 security = HTTPBearer(auto_error=False)
 
-VAULT_ADDR = os.getenv(
-    "VAULT_ADDR",
-    "http://127.0.0.1:8200"
+AUTH_SERVICE_URL = os.getenv(
+    "AUTH_SERVICE_URL",
+    "http://127.0.0.1:8100"
 )
-VAULT_TOKEN = os.getenv("VAULT_TOKEN")
 
-# Los dos backends de El Mariachi (Menú y Pedidos)
+VAULT_ADDR = os.getenv(
+    "VAULT_ADDR", "http://127.0.0.1:8200"
+)
+
+VAULT_TOKEN = os.getenv(
+    "VAULT_TOKEN"
+)
+
 BACKEND_MENU = os.getenv(
     "BACKEND_MENU_URL",
     "http://localhost:9000"
@@ -37,79 +40,84 @@ BACKEND_PEDIDOS = os.getenv(
 )
 
 if not VAULT_TOKEN:
-    raise RuntimeError("VAULT_TOKEN no configurado")
+    raise RuntimeError(
+        "VAULT_TOKEN no está configurado"
+    )
 
-# Qué recurso (primer segmento de la ruta) pertenece a qué backend
 RUTAS_MENU = {"platillos", "categorias"}
 RUTAS_PEDIDOS = {"pedidos", "reservas"}
 
-# Scope mínimo requerido para leer (GET) y para escribir (POST/PUT/PATCH/DELETE)
-SCOPES_LECTURA = {
-    "platillos": "menu:read",
-    "categorias": "menu:read",
-    "pedidos": "pedidos:read",
-    "reservas": "pedidos:read"
-}
-SCOPES_ESCRITURA = {
-    "platillos": "menu:write",
-    "categorias": "menu:write",
-    "pedidos": "pedidos:write",
-    "reservas": "pedidos:write"
-}
-
 
 async def get_gateway_secrets():
-    url = f"{VAULT_ADDR}/v1/secret/data/gateway"
+    url = (
+        f"{VAULT_ADDR}"
+        "/v1/secret/data/gateway"
+    )
     headers = {
         "X-Vault-Token": VAULT_TOKEN
     }
-    async with httpx.AsyncClient(timeout=5.0) as client:
-        try:
-            response = await client.get(url, headers=headers)
-        except httpx.RequestError:
-            raise HTTPException(
-                status_code=500,
-                detail="No fue posible acceder al gestor de secretos (Vault)"
-            )
 
+    async with httpx.AsyncClient(
+        timeout=5.0
+    ) as client:
+        response = await client.get(
+            url,
+            headers=headers
+        )
     if response.status_code != 200:
         raise HTTPException(
             status_code=500,
             detail="No fue posible acceder a Vault"
         )
-
     vault_response = response.json()
-    return vault_response["data"]["data"]
+    return vault_response[
+        "data"
+    ][
+        "data"
+    ]
 
 
 async def authenticate_client(
-    credentials: HTTPAuthorizationCredentials = Depends(security)
+        credentials:
+            HTTPAuthorizationCredentials
+            = Depends(security)
 ):
     if credentials is None:
         raise HTTPException(
             status_code=401,
             detail="Bearer token requerido"
         )
-
-    vault_secrets = await get_gateway_secrets()
-    expected_token = vault_secrets["client_token"]
-    received_token = credentials.credentials
-
-    valid = secrets.compare_digest(
-        received_token,
-        expected_token
+    gateway_secrets = (
+        await get_gateway_secrets()
     )
-    if not valid:
+    introspection_secret = (
+        gateway_secrets["auth_introspection_secret"]
+    )
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.post(
+                f"{AUTH_SERVICE_URL}/introspect",
+                json={"token": credentials.credentials},
+                headers={
+                    "X-Gateway-Auth-Secret": introspection_secret
+                }
+            )
+    except httpx.RequestError:
+        raise HTTPException(
+            status_code=502,
+            detail="Error consultando Authentication Service"
+        )
+    identity = response.json()
+    if not identity.get("active", False):
         raise HTTPException(
             status_code=401,
-            detail="Token invalido"
+            detail="Token invalido o expirado"
         )
-
     return {
-        "client_id": vault_secrets.get("client_id", "student-client"),
-        "backend_secret": vault_secrets["backend_shared_secret"],
-        # Lista de scopes que tiene autorizado este cliente, ej: ["menu:read", "pedidos:read"]
-        "scopes": vault_secrets.get("client_scopes", [])
+        "user_id": identity["user_id"],
+        "username": identity["username"],
+        "roles": identity["roles"],
+        "backend_secret": gateway_secrets["backend_shared_secret"]
     }
 
 
@@ -124,14 +132,11 @@ def resolver_backend(primer_segmento: str) -> str:
     )
 
 
-def verificar_scope(primer_segmento: str, metodo: str, scopes_cliente: list):
-    mapa_scopes = SCOPES_LECTURA if metodo == "GET" else SCOPES_ESCRITURA
-    scope_requerido = mapa_scopes.get(primer_segmento)
-
-    if scope_requerido and scope_requerido not in scopes_cliente:
+def verificar_rol(metodo: str, roles: list):
+    if metodo in ("POST", "PUT", "PATCH", "DELETE") and "admin" not in roles:
         raise HTTPException(
             status_code=403,
-            detail=f"El cliente no tiene el scope requerido: {scope_requerido}"
+            detail="El usuario no tiene permisos para esta operación"
         )
 
 
@@ -145,7 +150,13 @@ def health():
 
 @app.api_route(
     "/api/{path:path}",
-    methods=["GET", "POST", "PUT", "PATCH", "DELETE"]
+    methods=[
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+    ]
 )
 async def proxy(
     path: str,
@@ -154,27 +165,34 @@ async def proxy(
 ):
     primer_segmento = path.split("/")[0]
 
-    # Autorización por roles/scopes (403 si no tiene permiso)
-    verificar_scope(primer_segmento, request.method, auth["scopes"])
+    verificar_rol(request.method, auth["roles"])
 
-    # Decide a qué backend enrutar según el recurso solicitado
     backend_destino = resolver_backend(primer_segmento)
     target_url = f"{backend_destino}/{path}"
 
     body = await request.body()
 
-    # El Gateway usa SU PROPIO secreto interno hacia el backend,
-    # nunca reenvía el token original del cliente
     gateway_headers = {
-        "X-Gateway-Secret": auth["backend_secret"],
-        "X-Authenticated-Client": auth["client_id"]
+        "X-Gateway-Secret":
+            auth["backend_secret"],
+        "X-Authenticated-Client":
+            auth["user_id"],
+        "X-Authenticated-User":
+            auth["username"],
+        "X-Authenticated-Roles":
+            ",".join(auth["roles"])
     }
-    content_type = request.headers.get("content-type")
+    content_type = request.headers.get(
+        "content-type"
+    )
     if content_type:
-        gateway_headers["content-type"] = content_type
-
+        gateway_headers[
+            "content-type"
+        ] = content_type
     try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(
+            timeout=10.0
+        ) as client:
             upstream = await client.request(
                 method=request.method,
                 url=target_url,
@@ -190,7 +208,11 @@ async def proxy(
 
     response_headers = {}
     if "content-type" in upstream.headers:
-        response_headers["content-type"] = upstream.headers["content-type"]
+        response_headers[
+            "content-type"
+        ] = upstream.headers[
+            "content-type"
+        ]
 
     return Response(
         content=upstream.content,
