@@ -1,5 +1,6 @@
 import os
 import secrets
+
 from fastapi import (
     FastAPI,
     Header,
@@ -35,9 +36,15 @@ def verify_gateway(
         )
 
 
-@app.get("/health")
-def health():
+@app.get(
+    "/health",
+    dependencies=[Depends(verify_gateway)]
+)
+def health(
+    x_authenticated_client: str | None = Header(default=None)
+):
     return {
+        "authenticated_client": x_authenticated_client,
         "status": "OK",
         "service": "El Mariachi - API Menú"
     }
@@ -48,10 +55,16 @@ def health():
     dependencies=[Depends(verify_gateway)]
 )
 def platillos(
-    x_authenticated_client: str | None = Header(default=None)
+    x_authenticated_client: str | None = Header(default=None),
+    x_authenticated_user: str | None = Header(default=None),
+    x_authenticated_roles: str | None = Header(default=None)
 ):
     return {
-        "authenticated_client": x_authenticated_client,
+        "identity": {
+            "client_id": x_authenticated_client,
+            "username": x_authenticated_user,
+            "roles": x_authenticated_roles
+        },
         "platillos": [
             {"id": 1, "nombre": "Tacos al Pastor", "categoria": "Tacos", "precio": 2500},
             {"id": 2, "nombre": "Burrito Especial", "categoria": "Burritos", "precio": 4500},
@@ -65,10 +78,16 @@ def platillos(
     dependencies=[Depends(verify_gateway)]
 )
 def categorias(
-    x_authenticated_client: str | None = Header(default=None)
+    x_authenticated_client: str | None = Header(default=None),
+    x_authenticated_user: str | None = Header(default=None),
+    x_authenticated_roles: str | None = Header(default=None)
 ):
     return {
-        "authenticated_client": x_authenticated_client,
+        "identity": {
+            "client_id": x_authenticated_client,
+            "username": x_authenticated_user,
+            "roles": x_authenticated_roles
+        },
         "categorias": [
             {"id": 1, "nombre": "Tacos"},
             {"id": 2, "nombre": "Burritos"},
