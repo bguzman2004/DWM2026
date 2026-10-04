@@ -107,6 +107,11 @@ async def authenticate_client(
             status_code=502,
             detail="Error consultando Authentication Service"
         )
+    if response.status_code == 403:
+        raise HTTPException(
+            status_code=500,
+            detail="Gateway no autorizado ante el Authentication Service (revisa el secreto en Vault)"
+        )
     identity = response.json()
     if not identity.get("active", False):
         raise HTTPException(
@@ -163,7 +168,13 @@ async def proxy(
     request: Request,
     auth=Depends(authenticate_client)
 ):
-    primer_segmento = path.split("/")[0]
+    segmentos = path.split("/")
+    if any(seg in (".", "..") for seg in segmentos):
+        raise HTTPException(
+            status_code=400,
+            detail="Ruta no válida"
+        )
+    primer_segmento = segmentos[0]
 
     verificar_rol(request.method, auth["roles"])
 
