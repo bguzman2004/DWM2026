@@ -26,8 +26,8 @@ def verify_gateway(
     x_gateway_secret: str = Header(default="")
 ):
     valid = secrets.compare_digest(
-        x_gateway_secret,
-        INTERNAL_GATEWAY_SECRET
+        x_gateway_secret.encode("utf-8"),
+        INTERNAL_GATEWAY_SECRET.encode("utf-8")
     )
     if not valid:
         raise HTTPException(

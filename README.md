@@ -45,3 +45,53 @@ curl http://localhost:8000/api/ordenes     # -> enruta al backend en español (9
 ```
 
 `/api/ordenes` no se mostró en la clase en vivo (quedó como ejercicio) — se agregó acá siguiendo el mismo patrón que `/api/productos`, para que las 4 rutas del backend tengan su equivalente en el gateway.
+
+## Backend seguro: autenticación, gateway y Vault (Semana 9)
+
+Cuatro piezas, cada una con una sola responsabilidad:
+
+| Pieza | Archivo | Puerto | Qué hace |
+|---|---|---|---|
+| Vault (modo desarrollo) | — | 8200 | Guarda los secretos |
+| Authentication Service | `auth-service.py` | 8100 | Revisa usuario y contraseña, entrega un token de 15 minutos y dice si un token sigue vigente |
+| API Gateway | `gateway.py` | 8000 | Única entrada: valida el token, revisa el rol y enruta al backend |
+| Backend de menú | `backend_api.py` | 9000 | Entrega platillos y categorías, solo si la petición viene del gateway |
+
+El gateway también enruta `/api/pedidos` y `/api/reservas` al puerto 9100; ese backend todavía no está en este repositorio.
+
+**Cómo funciona:**
+1. El usuario hace login en el Authentication Service y recibe un token.
+2. Llama al gateway con `Authorization: Bearer <token>`.
+3. El gateway le pregunta al Authentication Service si el token sigue vigente (con un secreto que saca de Vault) y revisa el rol.
+4. Si todo está bien, llama al backend con un secreto interno y le avisa quién hizo la petición.
+
+**Permisos:** ver (`GET`) lo puede hacer cualquier usuario con sesión; crear, editar o borrar (`POST`, `PUT`, `PATCH`, `DELETE`) solo el rol `admin`. Los usuarios de prueba están en `auth-service.py`.
+
+**Levantarlo** (PowerShell, una terminal por servicio):
+```powershell
+# Authentication Service
+$env:AUTH_INTROSPECTION_SECRET = "secreto-del-auth"
+uvicorn auth-service:app --port 8100
+
+# Backend de menú
+$env:INTERNAL_GATEWAY_SECRET = "secreto-del-backend"
+uvicorn backend_api:app --port 9000
+
+# API Gateway
+$env:VAULT_ADDR = "http://127.0.0.1:8200"
+$env:VAULT_TOKEN = "token-de-vault"
+uvicorn gateway:app --port 8000
+```
+
+Los secretos guardados en Vault tienen que ser los mismos que las variables de arriba: `auth_introspection_secret` igual a `AUTH_INTROSPECTION_SECRET`, y `backend_shared_secret` igual a `INTERNAL_GATEWAY_SECRET`:
+```bash
+vault kv put secret/gateway auth_introspection_secret="secreto-del-auth" backend_shared_secret="secreto-del-backend"
+```
+Cada servicio se niega a arrancar si le falta su secreto o su token.
+
+**Probarlo con Postman:**
+1. `POST http://127.0.0.1:8100/login` con el header `X-Gateway-Auth-Secret` (el secreto del auth) y el body JSON `{"username": "...", "password": "..."}`. Devuelve un `access_token`.
+2. `GET http://127.0.0.1:8000/api/platillos` con el header `Authorization: Bearer <access_token>`. Devuelve los platillos y quién hizo la petición (`identity`).
+3. `POST http://127.0.0.1:8000/api/platillos` con el token de un usuario que no es admin: responde 403.
+
+**Códigos que devuelve el gateway:** 401 sin token o con token vencido, 403 sin permiso para esa operación, 400 si la ruta no es válida, 502 si un servicio no responde, 500 si falla Vault o los secretos no coinciden.
