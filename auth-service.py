@@ -33,9 +33,21 @@ SESSIONS = {}
 TOKEN_LIFETIME_MINUTES = 15
 
 AUTH_INTROSPECTION_SECRET = os.getenv(
-    "AUTH_INTROSPECTION_SECRET",
-    "demo-instrospection-secret"
+    "AUTH_INTROSPECTION_SECRET"
 )
+
+if not AUTH_INTROSPECTION_SECRET:
+    raise RuntimeError(
+        "AUTH_INTROSPECTION_SECRET no esta configurado"
+    )
+
+
+def secreto_valido(recibido: str) -> bool:
+    # Se compara como bytes: un header con ñ o tildes da 403 y no error 500
+    return secrets.compare_digest(
+        recibido.encode("utf-8"),
+        AUTH_INTROSPECTION_SECRET.encode("utf-8")
+    )
 
 
 class LoginRequest(BaseModel):
@@ -50,10 +62,7 @@ class IntrospectionRequest(BaseModel):
 @app.post("/login")
 def login(request: LoginRequest,
     x_gateway_auth_secret: str = Header(default="")):
-    if not secrets.compare_digest(
-        x_gateway_auth_secret,
-        AUTH_INTROSPECTION_SECRET
-    ):
+    if not secreto_valido(x_gateway_auth_secret):
         raise HTTPException(
             status_code=403,
             detail="Gateway no autorizado"
@@ -89,10 +98,7 @@ def introspect(
     request: IntrospectionRequest,
     x_gateway_auth_secret: str = Header(default="")
 ):
-    if not secrets.compare_digest(
-        x_gateway_auth_secret,
-        AUTH_INTROSPECTION_SECRET
-    ):
+    if not secreto_valido(x_gateway_auth_secret):
         raise HTTPException(
             status_code=403,
             detail="Gateway no autorizado"
@@ -121,10 +127,7 @@ def logout(
     request: IntrospectionRequest,
     x_gateway_auth_secret: str = Header(default="")
 ):
-    if not secrets.compare_digest(
-        x_gateway_auth_secret,
-        AUTH_INTROSPECTION_SECRET
-    ):
+    if not secreto_valido(x_gateway_auth_secret):
         raise HTTPException(
             status_code=403,
             detail="Gateway no autorizado"
@@ -137,10 +140,7 @@ def logout(
 
 @app.get("/health")
 def health(x_gateway_auth_secret: str = Header(default="")):
-    if not secrets.compare_digest(
-        x_gateway_auth_secret,
-        AUTH_INTROSPECTION_SECRET
-    ):
+    if not secreto_valido(x_gateway_auth_secret):
         raise HTTPException(
             status_code=403,
             detail="Gateway no autorizado"
