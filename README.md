@@ -53,14 +53,14 @@ Cuatro piezas, cada una con una sola responsabilidad:
 | Pieza | Archivo | Puerto | Qué hace |
 |---|---|---|---|
 | Vault (modo desarrollo) | — | 8200 | Guarda los secretos |
-| Authentication Service | `auth-service.py` | 8100 | Revisa usuario y contraseña, entrega un token de 15 minutos y dice si un token sigue vigente |
+| Authentication Service | `auth-service.py` | 8100 | Revisa usuario y contraseña (guardadas con hash), entrega un token de 15 minutos, dice si un token sigue vigente y cierra sesiones |
 | API Gateway | `gateway.py` | 8000 | Única entrada: valida el token, revisa el rol y enruta al backend |
 | Backend de menú | `backend_api.py` | 9000 | Entrega platillos y categorías, solo si la petición viene del gateway |
 
 El gateway también enruta `/api/pedidos` y `/api/reservas` al puerto 9100; ese backend todavía no está en este repositorio.
 
 **Cómo funciona:**
-1. El usuario hace login en el Authentication Service y recibe un token.
+1. El usuario hace login en el gateway (`POST /auth/login`), que le pasa las credenciales al Authentication Service, y recibe un token.
 2. Llama al gateway con `Authorization: Bearer <token>`.
 3. El gateway le pregunta al Authentication Service si el token sigue vigente (con un secreto que saca de Vault) y revisa el rol.
 4. Si todo está bien, llama al backend con un secreto interno y le avisa quién hizo la petición.
@@ -90,8 +90,35 @@ vault kv put secret/gateway auth_introspection_secret="secreto-del-auth" backend
 Cada servicio se niega a arrancar si le falta su secreto o su token.
 
 **Probarlo con Postman:**
-1. `POST http://127.0.0.1:8100/login` con el header `X-Gateway-Auth-Secret` (el secreto del auth) y el body JSON `{"username": "...", "password": "..."}`. Devuelve un `access_token`.
+1. `POST http://127.0.0.1:8000/auth/login` con el body JSON `{"username": "...", "password": "..."}`. Devuelve un `access_token`.
 2. `GET http://127.0.0.1:8000/api/platillos` con el header `Authorization: Bearer <access_token>`. Devuelve los platillos y quién hizo la petición (`identity`).
 3. `POST http://127.0.0.1:8000/api/platillos` con el token de un usuario que no es admin: responde 403.
+4. `POST http://127.0.0.1:8000/auth/logout` con el mismo header `Authorization`: cierra la sesión y el token deja de servir.
 
-**Códigos que devuelve el gateway:** 401 sin token o con token vencido, 403 sin permiso para esa operación, 400 si la ruta no es válida, 502 si un servicio no responde, 500 si falla Vault o los secretos no coinciden.
+**Códigos que devuelve el gateway:** 401 sin token o con token vencido, 403 sin permiso para esa operación, 400 si la ruta no es válida, 502 si un servicio no responde, 500 si falla Vault o los secretos no coinciden, 429 si se hacen demasiados intentos fallidos de login.
+
+### Authentication Service (Semana 10)
+
+`auth-service.py` autentica al usuario y administra su sesión. No hace lógica de negocio ni enruta nada.
+
+| Endpoint | Qué hace |
+|---|---|
+| `POST /login` | Valida usuario y contraseña y entrega un token de 15 minutos |
+| `POST /introspect` | Dice si un token sigue activo y devuelve identidad, roles y vencimiento |
+| `POST /logout` | Cierra la sesión (el token deja de servir) |
+| `GET /health` | Estado del servicio |
+
+- **Solo el gateway puede llamarlo:** los 4 endpoints exigen el header `X-Gateway-Auth-Secret`. Sin él (o con uno distinto) responde 403. Por eso el login y el logout de los usuarios pasan por el gateway (`/auth/login` y `/auth/logout`), que agrega el secreto sacándolo de Vault.
+- **Contraseñas con hash:** `USERS` guarda `password_hash` (PBKDF2-HMAC-SHA256 con sal y 600.000 iteraciones), no la contraseña. Para agregar un usuario ejecuta `python auth_passwords.py`, escribe la contraseña y pega el resultado en `USERS`.
+- **Mismo mensaje para usuario o contraseña incorrectos** (`Credenciales incorrectas`), y siempre se verifica un hash, exista el usuario o no: no se puede descubrir qué usuarios existen ni por el mensaje ni por el tiempo de respuesta.
+- **Límite de intentos:** 5 intentos fallidos en 5 minutos bloquean a ese usuario por 60 segundos (responde 429 con `Retry-After`).
+- **Sesiones:** viven en memoria (se pierden al reiniciar el servicio) y las vencidas se limpian en cada login.
+
+### Pruebas automáticas
+
+```bash
+pip install -r requirements.txt
+pytest -q
+```
+
+`test_auth_service.py` prueba el Authentication Service: el secreto en cada endpoint, el login, el vencimiento y el cierre de sesión de los tokens, el límite de intentos y que no haya contraseñas en texto plano.

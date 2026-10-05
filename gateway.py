@@ -12,6 +12,7 @@ from fastapi.security import (
     HTTPBearer,
     HTTPAuthorizationCredentials
 )
+from pydantic import BaseModel
 
 app = FastAPI(title="El Mariachi - API Gateway")
 
@@ -122,7 +123,8 @@ async def authenticate_client(
         "user_id": identity["user_id"],
         "username": identity["username"],
         "roles": identity["roles"],
-        "backend_secret": gateway_secrets["backend_shared_secret"]
+        "backend_secret": gateway_secrets["backend_shared_secret"],
+        "introspection_secret": introspection_secret
     }
 
 
@@ -151,6 +153,65 @@ def health():
         "status": "OK",
         "service": "El Mariachi - API Gateway"
     }
+
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
+def respuesta_del_auth(response: httpx.Response) -> Response:
+    headers = {}
+    if "retry-after" in response.headers:
+        headers["retry-after"] = response.headers["retry-after"]
+    return Response(
+        content=response.content,
+        status_code=response.status_code,
+        media_type="application/json",
+        headers=headers
+    )
+
+
+@app.post("/auth/login")
+async def login(datos: LoginRequest):
+    gateway_secrets = await get_gateway_secrets()
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.post(
+                f"{AUTH_SERVICE_URL}/login",
+                json=datos.model_dump(),
+                headers={
+                    "X-Gateway-Auth-Secret": gateway_secrets["auth_introspection_secret"]
+                }
+            )
+    except httpx.RequestError:
+        raise HTTPException(
+            status_code=502,
+            detail="Error consultando Authentication Service"
+        )
+    return respuesta_del_auth(response)
+
+
+@app.post("/auth/logout")
+async def logout(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    auth=Depends(authenticate_client)
+):
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.post(
+                f"{AUTH_SERVICE_URL}/logout",
+                json={"token": credentials.credentials},
+                headers={
+                    "X-Gateway-Auth-Secret": auth["introspection_secret"]
+                }
+            )
+    except httpx.RequestError:
+        raise HTTPException(
+            status_code=502,
+            detail="Error consultando Authentication Service"
+        )
+    return respuesta_del_auth(response)
 
 
 @app.api_route(
