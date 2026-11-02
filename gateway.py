@@ -1,150 +1,113 @@
 import os
-import httpx
 
-from fastapi import (
-    FastAPI,
-    Depends,
-    HTTPException,
-    Request,
-    Response
-)
-from fastapi.security import (
-    HTTPBearer,
-    HTTPAuthorizationCredentials
-)
+import httpx
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from pydantic import BaseModel
 
-app = FastAPI(title="El Mariachi - API Gateway")
-
-security = HTTPBearer(auto_error=False)
-
-AUTH_SERVICE_URL = os.getenv(
-    "AUTH_SERVICE_URL",
-    "http://127.0.0.1:8100"
+app = FastAPI(
+    title="El Mariachi - API Gateway",
+    description="Valida sesión, autoriza, propaga identidad y enruta al backend"
 )
 
-VAULT_ADDR = os.getenv(
-    "VAULT_ADDR", "http://127.0.0.1:8200"
-)
-
-VAULT_TOKEN = os.getenv(
-    "VAULT_TOKEN"
-)
-
-BACKEND_MENU = os.getenv(
-    "BACKEND_MENU_URL",
-    "http://localhost:9000"
-)
-BACKEND_PEDIDOS = os.getenv(
-    "BACKEND_PEDIDOS_URL",
-    "http://localhost:9100"
-)
+VAULT_ADDR = os.getenv("VAULT_ADDR", "http://127.0.0.1:8200")
+VAULT_TOKEN = os.getenv("VAULT_TOKEN")
+AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL", "http://127.0.0.1:8100")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:9000")
+COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").lower() == "true"
 
 if not VAULT_TOKEN:
-    raise RuntimeError(
-        "VAULT_TOKEN no está configurado"
-    )
+    raise RuntimeError("VAULT_TOKEN no esta configurado")
 
-RUTAS_MENU = {"platillos", "categorias"}
-RUTAS_PEDIDOS = {"pedidos", "reservas"}
+COOKIE_NAME = "session_token"
+RECURSOS = {"platillos", "categorias", "pedidos"}
+METODOS_ESCRITURA = {"POST", "PUT", "PATCH", "DELETE"}
+
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
+def new_client(timeout: float = 5.0) -> httpx.AsyncClient:
+    return httpx.AsyncClient(timeout=timeout)
 
 
 async def get_gateway_secrets():
-    url = (
-        f"{VAULT_ADDR}"
-        "/v1/secret/data/gateway"
-    )
-    headers = {
-        "X-Vault-Token": VAULT_TOKEN
-    }
-
-    async with httpx.AsyncClient(
-        timeout=5.0
-    ) as client:
-        response = await client.get(
-            url,
-            headers=headers
-        )
-    if response.status_code != 200:
+    try:
+        async with new_client() as client:
+            response = await client.get(
+                f"{VAULT_ADDR}/v1/secret/data/gateway",
+                headers={"X-Vault-Token": VAULT_TOKEN}
+            )
+        if response.status_code != 200:
+            raise ValueError("respuesta inesperada de Vault")
+        data = response.json()["data"]["data"]
+        return {
+            "backend_shared_secret": data["backend_shared_secret"],
+            "auth_introspection_secret": data["auth_introspection_secret"]
+        }
+    except (httpx.RequestError, ValueError, KeyError, TypeError):
         raise HTTPException(
             status_code=500,
-            detail="No fue posible acceder a Vault"
+            detail="No fue posible acceder al gestor de secretos"
         )
-    vault_response = response.json()
-    return vault_response[
-        "data"
-    ][
-        "data"
-    ]
 
 
-async def authenticate_client(
-        credentials:
-            HTTPAuthorizationCredentials
-            = Depends(security)
-):
-    if credentials is None:
-        raise HTTPException(
-            status_code=401,
-            detail="Bearer token requerido"
-        )
-    gateway_secrets = (
-        await get_gateway_secrets()
-    )
-    introspection_secret = (
-        gateway_secrets["auth_introspection_secret"]
-    )
+async def call_auth(path: str, payload: dict, headers: dict | None = None):
     try:
-        async with httpx.AsyncClient(timeout=5.0) as client:
-            response = await client.post(
-                f"{AUTH_SERVICE_URL}/introspect",
-                json={"token": credentials.credentials},
-                headers={
-                    "X-Gateway-Auth-Secret": introspection_secret
-                }
+        async with new_client() as client:
+            return await client.post(
+                f"{AUTH_SERVICE_URL}{path}",
+                json=payload,
+                headers=headers
             )
     except httpx.RequestError:
         raise HTTPException(
-            status_code=502,
-            detail="Error consultando Authentication Service"
+            status_code=503,
+            detail="Servicio de autenticación no disponible"
         )
-    if response.status_code == 403:
+
+
+async def introspect(token: str, introspection_secret: str):
+    response = await call_auth(
+        "/introspect",
+        {"token": token},
+        {"X-Gateway-Auth-Secret": introspection_secret}
+    )
+    if response.status_code != 200:
         raise HTTPException(
-            status_code=500,
-            detail="Gateway no autorizado ante el Authentication Service (revisa el secreto en Vault)"
+            status_code=503,
+            detail="Servicio de autenticación no disponible"
         )
     identity = response.json()
     if not identity.get("active", False):
+        return None
+    return identity
+
+
+async def authenticate(request: Request):
+    token = request.cookies.get(COOKIE_NAME)
+    if not token:
         raise HTTPException(
             status_code=401,
-            detail="Token invalido o expirado"
+            detail="Sesión requerida"
+        )
+    gateway_secrets = await get_gateway_secrets()
+    identity = await introspect(
+        token,
+        gateway_secrets["auth_introspection_secret"]
+    )
+    if identity is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Sesión inválida o expirada"
         )
     return {
         "user_id": identity["user_id"],
         "username": identity["username"],
         "roles": identity["roles"],
-        "backend_secret": gateway_secrets["backend_shared_secret"],
-        "introspection_secret": introspection_secret
+        "backend_secret": gateway_secrets["backend_shared_secret"]
     }
-
-
-def resolver_backend(primer_segmento: str) -> str:
-    if primer_segmento in RUTAS_MENU:
-        return BACKEND_MENU
-    if primer_segmento in RUTAS_PEDIDOS:
-        return BACKEND_PEDIDOS
-    raise HTTPException(
-        status_code=404,
-        detail=f"Ruta '{primer_segmento}' no reconocida por el Gateway"
-    )
-
-
-def verificar_rol(metodo: str, roles: list):
-    if metodo in ("POST", "PUT", "PATCH", "DELETE") and "admin" not in roles:
-        raise HTTPException(
-            status_code=403,
-            detail="El usuario no tiene permisos para esta operación"
-        )
 
 
 @app.get("/health")
@@ -155,119 +118,120 @@ def health():
     }
 
 
-class LoginRequest(BaseModel):
-    username: str
-    password: str
-
-
-def respuesta_del_auth(response: httpx.Response) -> Response:
-    headers = {}
-    if "retry-after" in response.headers:
-        headers["retry-after"] = response.headers["retry-after"]
-    return Response(
-        content=response.content,
-        status_code=response.status_code,
-        media_type="application/json",
-        headers=headers
-    )
-
-
 @app.post("/auth/login")
-async def login(datos: LoginRequest):
-    gateway_secrets = await get_gateway_secrets()
-    try:
-        async with httpx.AsyncClient(timeout=5.0) as client:
-            response = await client.post(
-                f"{AUTH_SERVICE_URL}/login",
-                json=datos.model_dump(),
-                headers={
-                    "X-Gateway-Auth-Secret": gateway_secrets["auth_introspection_secret"]
-                }
-            )
-    except httpx.RequestError:
+async def login(body: LoginRequest, response: Response):
+    auth_response = await call_auth(
+        "/login",
+        {"username": body.username, "password": body.password}
+    )
+    if auth_response.status_code == 401:
         raise HTTPException(
-            status_code=502,
-            detail="Error consultando Authentication Service"
+            status_code=401,
+            detail="Credenciales incorrectas"
         )
-    return respuesta_del_auth(response)
+    if auth_response.status_code != 200:
+        raise HTTPException(
+            status_code=503,
+            detail="Servicio de autenticación no disponible"
+        )
+    session = auth_response.json()
+    gateway_secrets = await get_gateway_secrets()
+    identity = await introspect(
+        session["access_token"],
+        gateway_secrets["auth_introspection_secret"]
+    )
+    if identity is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Servicio de autenticación no disponible"
+        )
+    response.set_cookie(
+        key=COOKIE_NAME,
+        value=session["access_token"],
+        max_age=session["expires_in"],
+        httponly=True,
+        samesite="lax",
+        secure=COOKIE_SECURE,
+        path="/"
+    )
+    return {
+        "message": "Sesión iniciada",
+        "username": identity["username"],
+        "roles": identity["roles"],
+        "expires_in": session["expires_in"]
+    }
+
+
+@app.get("/auth/me")
+async def me(auth=Depends(authenticate)):
+    return {
+        "user_id": auth["user_id"],
+        "username": auth["username"],
+        "roles": auth["roles"]
+    }
 
 
 @app.post("/auth/logout")
-async def logout(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
-    auth=Depends(authenticate_client)
-):
-    try:
-        async with httpx.AsyncClient(timeout=5.0) as client:
-            response = await client.post(
-                f"{AUTH_SERVICE_URL}/logout",
-                json={"token": credentials.credentials},
-                headers={
-                    "X-Gateway-Auth-Secret": auth["introspection_secret"]
-                }
-            )
-    except httpx.RequestError:
-        raise HTTPException(
-            status_code=502,
-            detail="Error consultando Authentication Service"
+async def logout(request: Request, response: Response):
+    token = request.cookies.get(COOKIE_NAME)
+    if token:
+        gateway_secrets = await get_gateway_secrets()
+        auth_response = await call_auth(
+            "/logout",
+            {"token": token},
+            {"X-Gateway-Auth-Secret": gateway_secrets["auth_introspection_secret"]}
         )
-    return respuesta_del_auth(response)
+        if auth_response.status_code != 200:
+            raise HTTPException(
+                status_code=503,
+                detail="Servicio de autenticación no disponible"
+            )
+    response.delete_cookie(COOKIE_NAME, path="/")
+    return {"message": "Sesión finalizada"}
 
 
 @app.api_route(
     "/api/{path:path}",
-    methods=[
-        "GET",
-        "POST",
-        "PUT",
-        "PATCH",
-        "DELETE"
-    ]
+    methods=["GET", "POST", "PUT", "PATCH", "DELETE"]
 )
 async def proxy(
     path: str,
     request: Request,
-    auth=Depends(authenticate_client)
+    auth=Depends(authenticate)
 ):
     segmentos = path.split("/")
-    if any(seg in (".", "..") for seg in segmentos):
+    if "." in segmentos or ".." in segmentos:
         raise HTTPException(
             status_code=400,
-            detail="Ruta no válida"
+            detail="Ruta inválida"
         )
-    primer_segmento = segmentos[0]
-
-    verificar_rol(request.method, auth["roles"])
-
-    backend_destino = resolver_backend(primer_segmento)
-    target_url = f"{backend_destino}/{path}"
+    if request.method in METODOS_ESCRITURA and "admin" not in auth["roles"]:
+        raise HTTPException(
+            status_code=403,
+            detail="No tiene permisos para esta operación"
+        )
+    if segmentos[0] not in RECURSOS:
+        raise HTTPException(
+            status_code=404,
+            detail="Recurso no reconocido por el Gateway"
+        )
 
     body = await request.body()
-
     gateway_headers = {
-        "X-Gateway-Secret":
-            auth["backend_secret"],
-        "X-Authenticated-Client":
-            auth["user_id"],
-        "X-Authenticated-User":
-            auth["username"],
-        "X-Authenticated-Roles":
-            ",".join(auth["roles"])
+        "X-Gateway-Secret": auth["backend_secret"],
+        "X-Authenticated-User": auth["user_id"],
+        "X-Authenticated-Username": auth["username"],
+        "X-Authenticated-Roles": ",".join(auth["roles"])
     }
-    content_type = request.headers.get(
-        "content-type"
-    )
+    content_type = request.headers.get("content-type")
     if content_type:
-        gateway_headers[
-            "content-type"
-        ] = content_type
+        gateway_headers["content-type"] = content_type
+
     try:
-        async with httpx.AsyncClient(
-            timeout=10.0
-        ) as client:
+        async with new_client(timeout=10.0) as client:
             upstream = await client.request(
                 method=request.method,
-                url=target_url,
+                url=f"{BACKEND_URL}/{path}",
                 params=request.query_params,
                 content=body,
                 headers=gateway_headers
@@ -280,11 +244,7 @@ async def proxy(
 
     response_headers = {}
     if "content-type" in upstream.headers:
-        response_headers[
-            "content-type"
-        ] = upstream.headers[
-            "content-type"
-        ]
+        response_headers["content-type"] = upstream.headers["content-type"]
 
     return Response(
         content=upstream.content,
