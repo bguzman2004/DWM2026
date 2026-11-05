@@ -1,55 +1,24 @@
+# Productor STOMP de El Mariachi: arma un pedido (o un texto) y lo deja en la cola.
+#
+# La clave del broker va en la variable STOMP_CLAVE o en --clave.
+#
+# Texto libre
+# python productor.py --formato texto --mensaje "Mesa 4 pide la cuenta"
+# Texto de ancho fijo
+# python productor.py --formato fijo --id 482913 --cliente "Camila Rojas" --item 1:2 --item 4:1
+# XML
+# python productor.py --formato xml --id 482913 --cliente "Camila Rojas" --item 1:2 --item 4:1
+# JSON
+# python productor.py --formato json --id 482913 --cliente "Camila Rojas" --item 1:2 --item 4:1
 import argparse
-import json
 import os
-import xml.etree.ElementTree as ET
-from decimal import Decimal, InvalidOperation
+import sys
 
 import stomp
+from stomp.exception import StompException
 
-DESTINO = "/queue/mariachi.pedidos"
+from contrato import DESTINO, FORMATOS, calcular_total, consola_utf8, construir_mensaje, validar_monto
 
-PLATILLOS = {
-    1: {"nombre": "Tacos al Pastor", "categoria": "Tacos", "precio": 2500},
-    2: {"nombre": "Burrito Especial", "categoria": "Burritos", "precio": 4500},
-    3: {"nombre": "Nachos Supreme", "categoria": "Nachos", "precio": 3500},
-    4: {"nombre": "Quesadilla Mixta", "categoria": "Otros", "precio": 3200},
-}
-
-PROMO_2X1 = {1}
-MAX_CANTIDAD = 20
-MAX_ITEMS = 9
-
-
-def validar_items(items):
-    if not items:
-        raise ValueError("El pedido debe tener al menos un platillo")
-    if len(items) > MAX_ITEMS:
-        raise ValueError(f"El pedido admite hasta {MAX_ITEMS} platillos distintos")
-    vistos = set()
-    for platillo, cantidad in items:
-        if platillo not in PLATILLOS:
-            raise ValueError(f"Platillo {platillo} no existe en el menu")
-        if platillo in vistos:
-            raise ValueError(f"Platillo {platillo} repetido: sume las cantidades en una sola linea")
-        if not 1 <= cantidad <= MAX_CANTIDAD:
-            raise ValueError(f"La cantidad de {PLATILLOS[platillo]['nombre']} debe estar entre 1 y {MAX_CANTIDAD}")
-        vistos.add(platillo)
-
-
-def unidades_cobradas(platillo, cantidad):
-    if platillo in PROMO_2X1:
-        return cantidad - cantidad // 2
-    return cantidad
-
-
-def calcular_total(items):
-    validar_items(items)
-    total = sum(PLATILLOS[p]["precio"] * unidades_cobradas(p, c) for p, c in items)
-    return Decimal(total).quantize(Decimal("0.01"))
-
-
-def pesos(monto):
-    return "$" + f"{int(Decimal(monto)):,}".replace(",", ".")
 ITEMS_POR_DEFECTO = ["1:2", "4:1"]
 
 
@@ -61,48 +30,9 @@ def leer_item(texto):
         raise argparse.ArgumentTypeError(f"Item no valido '{texto}': use PLATILLO:CANTIDAD, por ejemplo 1:2")
 
 
-def construir_mensaje(formato: str, pedido: dict, texto: str) -> tuple[str, str]:
-    if formato == "texto":
-        return texto, "text/plain; charset=utf-8"
-    items = pedido["items"]
-    validar_items(items)
-    if formato == "fijo":
-        identificador = str(pedido["id"])
-        cliente = str(pedido["cliente"])
-        monto = Decimal(pedido["monto"])
-        monto_campo = f"{monto:010.2f}"
-        if not (identificador.isascii() and identificador.isdigit() and len(identificador) <= 6):
-            raise ValueError("En formato fijo, --id debe tener hasta 6 digitos ASCII")
-        if len(cliente) > 20 or not cliente.isascii():
-            raise ValueError("En formato fijo, --cliente admite hasta 20 caracteres ASCII (sin tildes ni ñ)")
-        if monto < 0 or len(monto_campo) != 10:
-            raise ValueError("En formato fijo, --monto debe estar entre 0 y 9999999.99")
-        detalle = "".join(f"{platillo:02d}{cantidad:02d}" for platillo, cantidad in items)
-        return f"{identificador.zfill(6)}{cliente:<20}{monto_campo}{len(items)}{detalle}", "text/plain; charset=utf-8"
-    datos = {
-        "id": str(pedido["id"]),
-        "cliente": pedido["cliente"],
-        "items": [{"platillo": platillo, "cantidad": cantidad} for platillo, cantidad in items],
-        "monto": str(pedido["monto"]),
-    }
-    if formato == "json":
-        return json.dumps(datos, ensure_ascii=False), "application/json; charset=utf-8"
-    if formato == "xml":
-        raiz = ET.Element("pedido")
-        for clave in ("id", "cliente", "monto"):
-            ET.SubElement(raiz, clave).text = datos[clave]
-        lista = ET.SubElement(raiz, "items")
-        for item in datos["items"]:
-            nodo = ET.SubElement(lista, "item")
-            ET.SubElement(nodo, "platillo").text = str(item["platillo"])
-            ET.SubElement(nodo, "cantidad").text = str(item["cantidad"])
-        return ET.tostring(raiz, encoding="unicode"), "application/xml; charset=utf-8"
-    raise ValueError(f"Formato desconocido: {formato}")
-
-
-def main():
+def crear_parser():
     parser = argparse.ArgumentParser(description="Productor STOMP de pedidos de El Mariachi")
-    parser.add_argument("--formato", choices=["texto", "fijo", "xml", "json"], required=True)
+    parser.add_argument("--formato", choices=FORMATOS, required=True)
     parser.add_argument("--mensaje", default="Hola desde El Mariachi")
     parser.add_argument("--id", default="482913", help="Numero de orden (MRC-######)")
     parser.add_argument("--cliente", default="Camila Rojas")
@@ -112,21 +42,20 @@ def main():
     parser.add_argument("--port", type=int, default=61613)
     parser.add_argument("--usuario", default=os.getenv("STOMP_USUARIO", "demo"))
     parser.add_argument("--clave", default=os.getenv("STOMP_CLAVE"))
-    args = parser.parse_args()
+    return parser
+
+
+def main(argv=None):
+    consola_utf8()
+    parser = crear_parser()
+    args = parser.parse_args(argv)
 
     if not args.clave:
         parser.error("Defina la variable STOMP_CLAVE o use --clave")
     items = args.item or [leer_item(texto) for texto in ITEMS_POR_DEFECTO]
     try:
-        monto = calcular_total(items) if args.monto is None else Decimal(args.monto)
-        if not monto.is_finite():
-            raise ValueError("El monto debe ser un numero finito")
-    except InvalidOperation:
-        parser.error(f"Monto no valido: {args.monto}")
-    except ValueError as exc:
-        parser.error(str(exc))
-    pedido = {"id": args.id, "cliente": args.cliente, "items": items, "monto": str(monto)}
-    try:
+        monto = calcular_total(items) if args.monto is None else validar_monto(args.monto)
+        pedido = {"id": args.id, "cliente": args.cliente, "items": items, "monto": str(monto)}
         cuerpo, mime = construir_mensaje(args.formato, pedido, args.mensaje)
     except ValueError as exc:
         parser.error(str(exc))
@@ -144,10 +73,15 @@ def main():
             },
         )
         print(f"Mensaje enviado a {DESTINO} (formato={args.formato}):\n{cuerpo}")
+    except (StompException, OSError) as exc:
+        print(f"No se pudo enviar el mensaje: {exc}. "
+              f"Esta andando el broker en {args.host}:{args.port}?", file=sys.stderr)
+        return 1
     finally:
         if conexion.is_connected():
             conexion.disconnect()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
