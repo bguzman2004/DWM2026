@@ -1,0 +1,31 @@
+sequenceDiagram
+    autonumber
+    actor C as Cliente (navegador)
+    participant G as API Gateway
+    participant A as Auth Service
+    participant O as orders
+    participant K as clients
+    participant I as inventory
+    participant P as payments
+    participant X as Proveedor de pagos
+    C->>G: POST /orders (cookie HttpOnly)
+    G->>A: introspect(token) [secreto arista gw->auth]
+    A-->>G: identidad verificada (user, roles, client_id)
+    G->>O: POST /orders + identidad [secreto arista gw->orders]
+    O->>K: GET /clients/{client_id} [secreto orders->clients]
+    K-->>O: 200 cliente existe
+    O->>I: POST /reservations [secreto orders->inventory]
+    I-->>O: 200 lineas con precio del catalogo, o 409 sin stock
+    O-->>G: 201 pedido pendiente_pago (total calculado)
+    G-->>C: 201
+    C->>G: POST /payments + Idempotency-Key
+    G->>P: POST /payments + identidad
+    P->>O: GET /internal/orders/{id} [secreto payments->orders]
+    O-->>P: cliente, total, estado
+    P-->>C: 201 pago pending + refProveedor
+    X->>G: POST /payments/webhook (firma HMAC)
+    G->>P: reenvia cuerpo sin modificar
+    P->>P: verifica HMAC (secreto en Vault) y event_id unico
+    P->>O: POST /internal/orders/{id}/paid
+    O-->>P: 200 pagado (o 409 si expiro)
+    P-->>X: 200 processed / duplicate

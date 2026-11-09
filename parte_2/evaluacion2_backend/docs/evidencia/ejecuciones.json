@@ -1,0 +1,1057 @@
+[
+  {
+    "id": "V1",
+    "titulo": "Acceso anonimo al catalogo",
+    "solicitud": "GET /products (sin sesion)",
+    "estado": 200,
+    "respuesta": {
+      "items": [
+        {
+          "id": 11,
+          "name": "Quesadilla Mixta",
+          "category": "Otros",
+          "price": 3200,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 12,
+          "name": "Elote Preparado",
+          "category": "Otros",
+          "price": 2000,
+          "active": true,
+          "in_stock": true
+        }
+      ],
+      "total": 2
+    },
+    "request_id": "b67c4ef8216b46b0",
+    "verifica": "gateway: ruta publica; inventory: solo campos publicos"
+  },
+  {
+    "id": "V2",
+    "titulo": "Operacion protegida sin sesion",
+    "solicitud": "GET /orders (sin cookie)",
+    "estado": 401,
+    "respuesta": {
+      "error": {
+        "status": 401,
+        "message": "Sesion requerida",
+        "request_id": "6d3e71fdd0074f48"
+      }
+    },
+    "request_id": "6d3e71fdd0074f48",
+    "verifica": "api-gateway: introspeccion exige sesion"
+  },
+  {
+    "id": "F1",
+    "titulo": "P02 Menu: los platillos del frontend existen con el mismo id, nombre, categoria y precio",
+    "solicitud": "GET /products?limit=12 (sin sesion)",
+    "estado": 200,
+    "respuesta": {
+      "items": [
+        {
+          "id": 1,
+          "name": "Tacos al Pastor",
+          "category": "Tacos",
+          "price": 2500,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 2,
+          "name": "Tacos de Carnitas",
+          "category": "Tacos",
+          "price": 2500,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 3,
+          "name": "Tacos de Birria",
+          "category": "Tacos",
+          "price": 3000,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 4,
+          "name": "Burrito Especial",
+          "category": "Burritos",
+          "price": 4500,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 5,
+          "name": "Burrito de Pollo",
+          "category": "Burritos",
+          "price": 4200,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 6,
+          "name": "Burrito Vegetariano",
+          "category": "Burritos",
+          "price": 4000,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 7,
+          "name": "Nachos Supreme",
+          "category": "Nachos",
+          "price": 3500,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 8,
+          "name": "Nachos con Carne",
+          "category": "Nachos",
+          "price": 4200,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 9,
+          "name": "Agua de Horchata",
+          "category": "Bebidas",
+          "price": 1800,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 10,
+          "name": "Agua de Jamaica",
+          "category": "Bebidas",
+          "price": 1800,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 11,
+          "name": "Quesadilla Mixta",
+          "category": "Otros",
+          "price": 3200,
+          "active": true,
+          "in_stock": true
+        },
+        {
+          "id": 12,
+          "name": "Elote Preparado",
+          "category": "Otros",
+          "price": 2000,
+          "active": true,
+          "in_stock": true
+        }
+      ],
+      "total": 12
+    },
+    "request_id": "003ef5246b674cbe",
+    "verifica": "inventory: catalogo coherente con script.js del frontend"
+  },
+  {
+    "id": "F2",
+    "titulo": "P01 Inicio: promocion del dia publicada por el backend",
+    "solicitud": "GET /promotions (sin sesion)",
+    "estado": 200,
+    "respuesta": {
+      "items": [
+        {
+          "id": 1,
+          "product_id": 1,
+          "product_name": "Tacos al Pastor",
+          "kind": "2x1",
+          "label": "PROMOCIÓN DEL DÍA: 2x1 en Tacos al Pastor",
+          "active": true
+        }
+      ]
+    },
+    "request_id": "d7a14d789e51463b",
+    "verifica": "inventory: promocion vigente; el banner deja de ser texto fijo"
+  },
+  {
+    "id": "F3",
+    "titulo": "P03 Pedido: datos de contacto del formulario",
+    "solicitud": "PATCH /clients/CLI-001 {name: \"  Camila   Rojas \", phone: \"9 1111 1111\", email: \"camila.rojas@example.com\"} (camila)",
+    "estado": 200,
+    "respuesta": {
+      "id": "CLI-001",
+      "name": "Camila Rojas",
+      "email": "camila.rojas@example.com",
+      "phone": "+56911111111",
+      "created_at": "2026-11-09T18:29:53.097384+00:00"
+    },
+    "request_id": "22dc087ecaea4ca7",
+    "verifica": "clients: valida y normaliza como el formulario (celular chileno, nombre >= 3)"
+  },
+  {
+    "id": "F4",
+    "titulo": "P03 Pedido: telefono invalido segun la regla del frontend",
+    "solicitud": "PATCH /clients/CLI-001 {phone: \"12345\"} (camila)",
+    "estado": 422,
+    "respuesta": {
+      "error": {
+        "status": 422,
+        "message": "Datos invalidos",
+        "request_id": "18d325d6369f427a",
+        "details": [
+          {
+            "loc": [
+              "body",
+              "phone"
+            ],
+            "msg": "Value error, telefono invalido: debe ser un celular chileno, por ejemplo 912345678"
+          }
+        ]
+      }
+    },
+    "request_id": "18d325d6369f427a",
+    "verifica": "clients: el servidor repite la validacion del navegador"
+  },
+  {
+    "id": "V3",
+    "titulo": "Administracion desde rol sin permiso",
+    "solicitud": "POST /products con sesion de camila (customer)",
+    "estado": 403,
+    "respuesta": {
+      "error": {
+        "status": 403,
+        "message": "Sin permisos para esta operacion",
+        "request_id": "c10415690fe647b0"
+      }
+    },
+    "request_id": "c10415690fe647b0",
+    "verifica": "api-gateway (rol) y inventory (rol) - doble verificacion"
+  },
+  {
+    "id": "V4a",
+    "titulo": "Cliente crea orden; el total lo calcula el servidor",
+    "solicitud": "POST /orders {items:[{product_id:1, qty:2},{product_id:11, qty:1}], notes} (carrito de P03)",
+    "estado": 201,
+    "respuesta": {
+      "id": "ORD-2E3AD3B6",
+      "client_id": "CLI-001",
+      "status": "pendiente_pago",
+      "subtotal": 8200,
+      "discount": 2500,
+      "total": 5700,
+      "created_at": "2026-11-09T18:29:54.229843+00:00",
+      "updated_at": "2026-11-09T18:29:54.229843+00:00",
+      "notes": "sin cebolla",
+      "items": [
+        {
+          "product_id": 1,
+          "name": "Tacos al Pastor",
+          "unit_price": 2500,
+          "qty": 2,
+          "discount": 2500,
+          "promo": "2x1"
+        },
+        {
+          "product_id": 11,
+          "name": "Quesadilla Mixta",
+          "unit_price": 3200,
+          "qty": 1,
+          "discount": 0,
+          "promo": null
+        }
+      ]
+    },
+    "request_id": "8c80b4aa40474768",
+    "verifica": "orders + inventory (reserva, precio y 2x1 calculados en el servidor)"
+  },
+  {
+    "id": "F5",
+    "titulo": "P04 Confirmacion: datos que muestra la pantalla en una consulta",
+    "solicitud": "query order(id) { id createdAt subtotal discount total notes client { name phone } items { qty name unitPrice discount } }",
+    "estado": 200,
+    "respuesta": {
+      "data": {
+        "order": {
+          "id": "ORD-2E3AD3B6",
+          "createdAt": "2026-11-09T18:29:54.229843+00:00",
+          "subtotal": 8200,
+          "discount": 2500,
+          "total": 5700,
+          "notes": "sin cebolla",
+          "client": {
+            "name": "Camila Rojas",
+            "phone": "+56911111111"
+          },
+          "items": [
+            {
+              "qty": 2,
+              "name": "Tacos al Pastor",
+              "unitPrice": 2500,
+              "discount": 2500,
+              "promo": "2x1"
+            },
+            {
+              "qty": 1,
+              "name": "Quesadilla Mixta",
+              "unitPrice": 3200,
+              "discount": 0,
+              "promo": null
+            }
+          ]
+        }
+      }
+    },
+    "request_id": "bcd33f04877041c3",
+    "verifica": "graphql-gateway: orders + clients"
+  },
+  {
+    "id": "V4b",
+    "titulo": "Consulta de pedido propio",
+    "solicitud": "GET /orders/ORD-2E3AD3B6 (camila)",
+    "estado": 200,
+    "respuesta": {
+      "id": "ORD-2E3AD3B6",
+      "client_id": "CLI-001",
+      "status": "pendiente_pago",
+      "subtotal": 8200,
+      "discount": 2500,
+      "total": 5700,
+      "created_at": "2026-11-09T18:29:54.229843+00:00",
+      "updated_at": "2026-11-09T18:29:54.229843+00:00",
+      "notes": "sin cebolla",
+      "items": [
+        {
+          "product_id": 1,
+          "name": "Tacos al Pastor",
+          "unit_price": 2500,
+          "qty": 2,
+          "discount": 2500,
+          "promo": "2x1"
+        },
+        {
+          "product_id": 11,
+          "name": "Quesadilla Mixta",
+          "unit_price": 3200,
+          "qty": 1,
+          "discount": 0,
+          "promo": null
+        }
+      ]
+    },
+    "request_id": "02392cfcf4084ebf",
+    "verifica": "orders: propiedad del recurso"
+  },
+  {
+    "id": "V4c",
+    "titulo": "Consulta de pedido ajeno",
+    "solicitud": "GET /orders/ORD-2E3AD3B6 (matias)",
+    "estado": 404,
+    "respuesta": {
+      "error": {
+        "status": 404,
+        "message": "Orden no encontrada",
+        "request_id": "ac21b0ab7d674083"
+      }
+    },
+    "request_id": "ac21b0ab7d674083",
+    "verifica": "orders: propiedad; responde 404 para no revelar existencia"
+  },
+  {
+    "id": "V4d",
+    "titulo": "Pedido ajeno por GraphQL",
+    "solicitud": "query { order(id) { id total } } (matias)",
+    "estado": 200,
+    "respuesta": {
+      "data": {
+        "order": null
+      }
+    },
+    "request_id": "c8438b137a0840f3",
+    "verifica": "graphql-gateway delega en orders; devuelve null"
+  },
+  {
+    "id": "V5a",
+    "titulo": "Acceso directo al backend sin identidad",
+    "solicitud": "GET orders:/orders (sin cabeceras de servicio)",
+    "estado": 403,
+    "respuesta": {
+      "error": {
+        "status": 403,
+        "message": "Llamador no autorizado",
+        "request_id": "fa8c0e08ebfd4298"
+      }
+    },
+    "request_id": "fa8c0e08ebfd4298",
+    "verifica": "orders: garantia de llamador"
+  },
+  {
+    "id": "V5b",
+    "titulo": "Acceso directo con secreto de otra arista",
+    "solicitud": "GET inventory:/products con token orders->inventory declarando ser graphql-gateway",
+    "estado": 403,
+    "respuesta": {
+      "error": {
+        "status": 403,
+        "message": "Llamador no autorizado",
+        "request_id": "e5c288e3fbae4fe2"
+      }
+    },
+    "request_id": "e5c288e3fbae4fe2",
+    "verifica": "inventory: secreto por arista"
+  },
+  {
+    "id": "V5c",
+    "titulo": "Cliente inyecta cabeceras de identidad",
+    "solicitud": "POST /products con X-Roles: admin (camila)",
+    "estado": 403,
+    "respuesta": {
+      "error": {
+        "status": 403,
+        "message": "Sin permisos para esta operacion",
+        "request_id": "1c12b4298f074647"
+      }
+    },
+    "request_id": "1c12b4298f074647",
+    "verifica": "api-gateway descarta cabeceras de identidad del navegador"
+  },
+  {
+    "id": "V6a",
+    "titulo": "Inicio de pago",
+    "solicitud": "POST /payments {order_id} + Idempotency-Key",
+    "estado": 201,
+    "respuesta": {
+      "id": "PAY-F682328750",
+      "order_id": "ORD-2E3AD3B6",
+      "amount": 5700,
+      "status": "pending",
+      "provider_ref": "chk_f8a789f320fdf213",
+      "created_at": "2026-11-09T18:29:54.462169+00:00",
+      "updated_at": "2026-11-09T18:29:54.462169+00:00",
+      "reused": false
+    },
+    "request_id": "8f8bf7782a2b4553",
+    "verifica": "payments: monto tomado de orders"
+  },
+  {
+    "id": "V6b",
+    "titulo": "Confirmar pago sin firma valida (datos alterados)",
+    "solicitud": "POST /payments/webhook firma incorrecta",
+    "estado": 401,
+    "respuesta": {
+      "error": {
+        "status": 401,
+        "message": "Firma invalida",
+        "request_id": "02c383e57cdc4d01"
+      }
+    },
+    "request_id": "02c383e57cdc4d01",
+    "verifica": "payments: HMAC con secreto de Vault"
+  },
+  {
+    "id": "V6c",
+    "titulo": "Confirmar pago con monto alterado",
+    "solicitud": "POST /payments/webhook monto-1 con firma valida",
+    "estado": 409,
+    "respuesta": {
+      "error": {
+        "status": 409,
+        "message": "El monto del evento no coincide",
+        "request_id": "e7eef13d29664d80"
+      }
+    },
+    "request_id": "e7eef13d29664d80",
+    "verifica": "payments: compara con el monto guardado"
+  },
+  {
+    "id": "V6d",
+    "titulo": "Cliente intenta marcar pagado desde el navegador",
+    "solicitud": "PATCH /orders/ORD-2E3AD3B6/status {status: preparando} (camila)",
+    "estado": 403,
+    "respuesta": {
+      "error": {
+        "status": 403,
+        "message": "Sin permisos para esta operacion",
+        "request_id": "867d3fc8684d4b4f"
+      }
+    },
+    "request_id": "867d3fc8684d4b4f",
+    "verifica": "api-gateway y orders: solo cocina/admin"
+  },
+  {
+    "id": "V6e",
+    "titulo": "Cliente intenta llamar la ruta interna de pago",
+    "solicitud": "POST /internal/orders/ORD-2E3AD3B6/paid (camila)",
+    "estado": 404,
+    "respuesta": {
+      "error": {
+        "status": 404,
+        "message": "Ruta no encontrada",
+        "request_id": "9f4406eebf1342d0"
+      }
+    },
+    "request_id": "9f4406eebf1342d0",
+    "verifica": "api-gateway: ruta no publicada"
+  },
+  {
+    "id": "V7a",
+    "titulo": "Webhook valido",
+    "solicitud": "POST /payments/webhook firmado",
+    "estado": 200,
+    "respuesta": {
+      "status": "processed",
+      "payment_status": "succeeded",
+      "order_sync": "synced"
+    },
+    "request_id": "d1347e46e74a458b",
+    "verifica": "payments -> orders (paid)"
+  },
+  {
+    "id": "V7b",
+    "titulo": "Webhook duplicado",
+    "solicitud": "POST /payments/webhook mismo event_id",
+    "estado": 200,
+    "respuesta": {
+      "status": "duplicate",
+      "payment_status": "succeeded",
+      "order_sync": "not_needed"
+    },
+    "request_id": "fc50e4d399a8481c",
+    "verifica": "payments: webhook_events.event_id unico"
+  },
+  {
+    "id": "V7c",
+    "titulo": "Estado final de la orden",
+    "solicitud": "GET /orders/ORD-2E3AD3B6",
+    "estado": 200,
+    "respuesta": {
+      "id": "ORD-2E3AD3B6",
+      "client_id": "CLI-001",
+      "status": "pagado",
+      "subtotal": 8200,
+      "discount": 2500,
+      "total": 5700,
+      "created_at": "2026-11-09T18:29:54.229843+00:00",
+      "updated_at": "2026-11-09T18:29:54.556231+00:00",
+      "notes": "sin cebolla",
+      "items": [
+        {
+          "product_id": 1,
+          "name": "Tacos al Pastor",
+          "unit_price": 2500,
+          "qty": 2,
+          "discount": 2500,
+          "promo": "2x1"
+        },
+        {
+          "product_id": 11,
+          "name": "Quesadilla Mixta",
+          "unit_price": 3200,
+          "qty": 1,
+          "discount": 0,
+          "promo": null
+        }
+      ]
+    },
+    "request_id": "5766e4cf15d1444b",
+    "verifica": "orders: una sola transicion a pagado"
+  },
+  {
+    "id": "G1",
+    "titulo": "Agregacion GraphQL (orders+inventory+clients+payments)",
+    "solicitud": "POST /graphql myOrders(first:10)",
+    "estado": 200,
+    "respuesta": {
+      "data": {
+        "myOrders": {
+          "total": 1,
+          "nextCursor": null,
+          "nodes": [
+            {
+              "id": "ORD-2E3AD3B6",
+              "status": "pagado",
+              "subtotal": 8200,
+              "discount": 2500,
+              "total": 5700,
+              "notes": "sin cebolla",
+              "client": {
+                "id": "CLI-001",
+                "name": "Camila Rojas",
+                "email": "camila.rojas@example.com"
+              },
+              "items": [
+                {
+                  "name": "Tacos al Pastor",
+                  "qty": 2,
+                  "unitPrice": 2500,
+                  "discount": 2500,
+                  "product": {
+                    "name": "Tacos al Pastor",
+                    "category": "Tacos",
+                    "inStock": true
+                  }
+                },
+                {
+                  "name": "Quesadilla Mixta",
+                  "qty": 1,
+                  "unitPrice": 3200,
+                  "discount": 0,
+                  "product": {
+                    "name": "Quesadilla Mixta",
+                    "category": "Otros",
+                    "inStock": true
+                  }
+                }
+              ],
+              "payment": {
+                "status": "succeeded",
+                "amount": 5700
+              }
+            }
+          ]
+        }
+      }
+    },
+    "request_id": "d9427c4c66304de5",
+    "verifica": "graphql-gateway: 4 subsistemas, 4 llamadas por lote"
+  },
+  {
+    "id": "G1b",
+    "titulo": "Llamadas internas de la agregacion (batching)",
+    "llamadas": [
+      [
+        "auth",
+        "POST",
+        "/introspect"
+      ],
+      [
+        "orders",
+        "GET",
+        "/orders"
+      ],
+      [
+        "clients",
+        "GET",
+        "/clients/batch"
+      ],
+      [
+        "payments",
+        "GET",
+        "/payments"
+      ],
+      [
+        "inventory",
+        "GET",
+        "/products/batch"
+      ],
+      [
+        "graphql-gateway",
+        "POST",
+        "/graphql"
+      ]
+    ]
+  },
+  {
+    "id": "G2",
+    "titulo": "Campo restringido por rol",
+    "solicitud": "product(id:1){ stock{available} } (camila)",
+    "estado": 200,
+    "respuesta": {
+      "data": {
+        "product": {
+          "name": "Tacos al Pastor",
+          "stock": null
+        }
+      },
+      "errors": [
+        {
+          "message": "Solo personal de cocina o administracion",
+          "locations": [
+            {
+              "line": 1,
+              "column": 25
+            }
+          ],
+          "path": [
+            "product",
+            "stock"
+          ]
+        }
+      ]
+    },
+    "request_id": "a71d568cc3a44775",
+    "verifica": "campo stock: permiso de staff"
+  },
+  {
+    "id": "G3",
+    "titulo": "Mismo campo con rol cocina",
+    "solicitud": "product(id:1){ stock{available} } (cocina)",
+    "estado": 200,
+    "respuesta": {
+      "data": {
+        "product": {
+          "name": "Tacos al Pastor",
+          "stock": {
+            "available": 48
+          }
+        }
+      }
+    },
+    "request_id": "6d870cae68664ff2",
+    "verifica": "campo stock: staff"
+  },
+  {
+    "id": "G4",
+    "titulo": "Limite de costo",
+    "solicitud": "6 alias de myOrders(first:50)",
+    "estado": 200,
+    "respuesta": {
+      "data": null,
+      "errors": [
+        {
+          "message": "Consulta demasiado costosa: 7206 excede el maximo 5000",
+          "locations": [
+            {
+              "line": 1,
+              "column": 1
+            }
+          ]
+        }
+      ]
+    },
+    "request_id": "1be6fbea55bb4fb8",
+    "verifica": "validacion previa a ejecutar"
+  },
+  {
+    "id": "G5",
+    "titulo": "Limite de pagina",
+    "solicitud": "products(first: 51)",
+    "estado": 200,
+    "respuesta": {
+      "data": null,
+      "errors": [
+        {
+          "message": "first debe estar entre 1 y 50",
+          "locations": [
+            {
+              "line": 1,
+              "column": 3
+            }
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      ]
+    },
+    "request_id": "7eb6c1c5da5e4508",
+    "verifica": "resolver"
+  },
+  {
+    "id": "G6",
+    "titulo": "Introspeccion deshabilitada",
+    "solicitud": "{ __schema { types { name } } }",
+    "estado": 200,
+    "respuesta": {
+      "data": null,
+      "errors": [
+        {
+          "message": "GraphQL introspection has been disabled, but the requested query contained the field '__schema'.",
+          "locations": [
+            {
+              "line": 1,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "message": "GraphQL introspection has been disabled, but the requested query contained the field 'types'.",
+          "locations": [
+            {
+              "line": 1,
+              "column": 14
+            }
+          ]
+        }
+      ]
+    },
+    "request_id": "b76f0d6af5654e79",
+    "verifica": "regla de validacion"
+  },
+  {
+    "id": "G7",
+    "titulo": "Error parcial: clients caido",
+    "solicitud": "myOrders { nodes { id total client { name } items { name } } }",
+    "estado": 200,
+    "respuesta": {
+      "data": {
+        "myOrders": {
+          "nodes": [
+            {
+              "id": "ORD-2E3AD3B6",
+              "total": 5700,
+              "client": null,
+              "items": [
+                {
+                  "name": "Tacos al Pastor"
+                },
+                {
+                  "name": "Quesadilla Mixta"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "errors": [
+        {
+          "message": "Servicio clients no disponible",
+          "locations": [
+            {
+              "line": 1,
+              "column": 41
+            }
+          ],
+          "path": [
+            "myOrders",
+            "nodes",
+            0,
+            "client"
+          ]
+        }
+      ]
+    },
+    "request_id": "fdc7ab361dc747d3",
+    "verifica": "datos de orders se conservan; client=null con error"
+  },
+  {
+    "id": "G8",
+    "titulo": "Resumen de ventas (cliente)",
+    "solicitud": "salesSummary (camila)",
+    "estado": 200,
+    "respuesta": {
+      "data": null,
+      "errors": [
+        {
+          "message": "Solo administracion",
+          "locations": [
+            {
+              "line": 1,
+              "column": 3
+            }
+          ],
+          "path": [
+            "salesSummary"
+          ]
+        }
+      ]
+    },
+    "request_id": "bb56f201a272419d",
+    "verifica": "resolver: solo admin"
+  },
+  {
+    "id": "G9",
+    "titulo": "Sincronizacion analitica (admin)",
+    "solicitud": "mutation { syncAnalytics }",
+    "estado": 200,
+    "respuesta": {
+      "data": {
+        "syncAnalytics": 2
+      }
+    },
+    "request_id": "b6af062336974f58",
+    "verifica": "graphql -> gRPC Sync -> orders export"
+  },
+  {
+    "id": "G10",
+    "titulo": "Resumen de ventas (admin) por gRPC",
+    "solicitud": "salesSummary(days:7, top:3)",
+    "estado": 200,
+    "respuesta": {
+      "data": {
+        "salesSummary": {
+          "orders": 1,
+          "revenue": 5700,
+          "topProducts": [
+            {
+              "productId": 11,
+              "name": "Quesadilla Mixta",
+              "units": 1,
+              "revenue": 3200
+            },
+            {
+              "productId": 1,
+              "name": "Tacos al Pastor",
+              "units": 2,
+              "revenue": 2500
+            }
+          ]
+        }
+      }
+    },
+    "request_id": "7d02a25059224f2f",
+    "verifica": "gRPC unary SalesSummary con deadline y metadata"
+  },
+  {
+    "id": "S1",
+    "titulo": "10 compras simultaneas de 5 unidades con stock 30",
+    "resultado": [
+      201,
+      201,
+      201,
+      201,
+      201,
+      201,
+      409,
+      409,
+      409,
+      409
+    ],
+    "verifica": "inventory: UPDATE condicional atomico; sin sobreventa"
+  },
+  {
+    "id": "H1",
+    "titulo": "Readiness de cada servicio",
+    "resultado": {
+      "api-gateway": {
+        "status": "ready",
+        "checks": {
+          "vault": "ok"
+        }
+      },
+      "auth": {
+        "status": "ready",
+        "checks": {
+          "database": "ok",
+          "vault": "ok"
+        }
+      },
+      "inventory": {
+        "status": "ready",
+        "checks": {
+          "database": "ok",
+          "vault": "ok"
+        }
+      },
+      "clients": {
+        "status": "ready",
+        "checks": {
+          "database": "ok",
+          "vault": "ok"
+        }
+      },
+      "orders": {
+        "status": "ready",
+        "checks": {
+          "database": "ok",
+          "vault": "ok"
+        }
+      },
+      "payments": {
+        "status": "ready",
+        "checks": {
+          "database": "ok",
+          "vault": "ok"
+        }
+      },
+      "graphql-gateway": {
+        "status": "ready",
+        "checks": {
+          "vault": "ok"
+        }
+      }
+    }
+  },
+  {
+    "id": "L1",
+    "titulo": "Logs con el mismo request_id 8c80b4aa40474768 en toda la cadena",
+    "lineas": [
+      {
+        "service": "auth",
+        "event": "request",
+        "method": "POST",
+        "path": "/introspect",
+        "status": 200,
+        "user": "-",
+        "caller": "api-gateway"
+      },
+      {
+        "service": "api-gateway",
+        "event": "upstream_call",
+        "method": "POST",
+        "path": "/introspect",
+        "status": 200,
+        "callee": "auth"
+      },
+      {
+        "service": "clients",
+        "event": "request",
+        "method": "GET",
+        "path": "/clients/CLI-001",
+        "status": 200,
+        "user": "USR-001",
+        "caller": "orders"
+      },
+      {
+        "service": "orders",
+        "event": "upstream_call",
+        "method": "GET",
+        "path": "/clients/CLI-001",
+        "status": 200,
+        "callee": "clients"
+      },
+      {
+        "service": "inventory",
+        "event": "request",
+        "method": "POST",
+        "path": "/reservations",
+        "status": 200,
+        "user": "-",
+        "caller": "orders"
+      },
+      {
+        "service": "orders",
+        "event": "upstream_call",
+        "method": "POST",
+        "path": "/reservations",
+        "status": 200,
+        "callee": "inventory"
+      },
+      {
+        "service": "orders",
+        "event": "order_created"
+      },
+      {
+        "service": "orders",
+        "event": "request",
+        "method": "POST",
+        "path": "/orders",
+        "status": 201,
+        "user": "USR-001",
+        "caller": "api-gateway"
+      },
+      {
+        "service": "api-gateway",
+        "event": "upstream_call",
+        "method": "POST",
+        "path": "/orders",
+        "status": 201,
+        "callee": "orders"
+      },
+      {
+        "service": "api-gateway",
+        "event": "request",
+        "method": "POST",
+        "path": "/orders",
+        "status": 201,
+        "user": "-",
+        "caller": "-"
+      }
+    ]
+  },
+  {
+    "id": "L2",
+    "titulo": "Busqueda de secretos en los logs",
+    "lineas_revisadas": 349,
+    "secretos_buscados": 10,
+    "coincidencias": 0
+  }
+]

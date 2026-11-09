@@ -1,0 +1,23 @@
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant G as API Gateway
+    participant Q as GraphQL Gateway
+    participant O as orders
+    participant K as clients
+    participant I as inventory
+    participant P as payments
+    C->>G: POST /graphql myOrders(first:10)
+    G->>Q: identidad verificada
+    Q->>Q: valida profundidad, costo y tamano de pagina
+    Q->>O: GET /orders?limit=10
+    O-->>Q: pedidos propios
+    par un lote por tipo de dato
+        Q->>K: GET /clients/batch?ids=...
+    and
+        Q->>I: GET /products/batch?ids=...
+    and
+        Q->>P: GET /payments?order_ids=...
+    end
+    Q->>Q: permisos por campo (email, stock, pago)
+    Q-->>C: data + errors parciales si algun servicio falla

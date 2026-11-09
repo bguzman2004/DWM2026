@@ -1,0 +1,103 @@
+type Client {
+  id: String!
+  name: String!
+  email: String
+  phone: String
+}
+
+input ItemInput {
+  productId: Int!
+  qty: Int!
+}
+
+type Me {
+  userId: String!
+  username: String!
+  roles: [String!]!
+  clientId: String
+  client: Client
+}
+
+type Mutation {
+  createOrder(items: [ItemInput!]!, notes: String = null, idempotencyKey: String = null): Order!
+  syncAnalytics: Int!
+}
+
+type Order {
+  id: String!
+  status: String!
+  subtotal: Int!
+  discount: Int!
+  total: Int!
+  createdAt: String!
+  notes: String
+  items: [OrderItem!]!
+  client: Client
+  payment: Payment
+}
+
+type OrderItem {
+  productId: Int!
+  name: String!
+  unitPrice: Int!
+  qty: Int!
+  discount: Int!
+  promo: String
+  product: Product
+}
+
+type OrderPage {
+  nodes: [Order!]!
+  total: Int!
+  nextCursor: String
+}
+
+type Payment {
+  id: String!
+  status: String!
+  amount: Int!
+  providerRef: String!
+}
+
+type Product {
+  id: Int!
+  name: String!
+  category: String!
+  price: Int!
+  inStock: Boolean!
+  stock: StockInfo
+}
+
+type ProductPage {
+  nodes: [Product!]!
+  total: Int!
+  nextCursor: String
+}
+
+type ProductTotal {
+  productId: Int!
+  name: String!
+  units: Int!
+  revenue: Int!
+}
+
+type Query {
+  me: Me!
+  products(first: Int! = 20, after: String = null, category: String = null): ProductPage!
+  product(id: Int!): Product
+  myOrders(first: Int! = 20, after: String = null, status: String = null): OrderPage!
+  order(id: String!): Order
+  salesSummary(days: Int! = 7, top: Int! = 5): SalesSummary!
+}
+
+type SalesSummary {
+  orders: Int!
+  revenue: Int!
+  topProducts: [ProductTotal!]!
+}
+
+type StockInfo {
+  onHand: Int!
+  reserved: Int!
+  available: Int!
+}

@@ -1,0 +1,61 @@
+digraph "mapa_componentes" {
+rankdir=LR; nodesep=0.55; ranksep=0.7; splines=true; compound=true;
+node [shape=plaintext fontname="Helvetica" fontsize=10]; edge [fontname="Helvetica" fontsize=9 labeldistance=1.6];
+subgraph cluster_pub { label="Internet"; style="rounded,dashed"; color="#888888"; fontname="Helvetica"; fontsize=10; labeljust=l;
+"nav" [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#B85450"><TR><TD BGCOLOR="#F8CECC" ALIGN="CENTER"><B>Navegador
+(frontend responsivo)</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">cookie HttpOnly</FONT></TD></TR></TABLE>>];
+"prov" [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#B85450"><TR><TD BGCOLOR="#F8CECC" ALIGN="CENTER"><B>Proveedor de pagos
+(adaptador de prueba)</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">webhook firmado HMAC</FONT></TD></TR></TABLE>>];
+}
+subgraph cluster_dmz { label="Red publica (compose: public)"; style="rounded,dashed"; color="#888888"; fontname="Helvetica"; fontsize=10; labeljust=l;
+"gw" [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#3B6EA8"><TR><TD BGCOLOR="#DAE8FC" ALIGN="CENTER"><B>API Gateway :8000</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">rutas explicitas, roles</FONT></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">limite de tasa, 64 KiB</FONT></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">descarta cabeceras de identidad</FONT></TD></TR></TABLE>>];
+}
+subgraph cluster_priv { label="Red privada (compose: private, internal: true)"; style="rounded,dashed"; color="#888888"; fontname="Helvetica"; fontsize=10; labeljust=l;
+"auth" [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#3B6EA8"><TR><TD BGCOLOR="#DAE8FC" ALIGN="CENTER"><B>Auth Service :8100</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">sesiones opacas (hash)</FONT></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">scrypt + sal</FONT></TD></TR></TABLE>>];
+"gql" [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#4F8A3B"><TR><TD BGCOLOR="#D5E8D4" ALIGN="CENTER"><B>GraphQL Gateway :9200</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">agregacion, batching</FONT></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">profundidad/costo/paginas</FONT></TD></TR></TABLE>>];
+"inv" [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#3B6EA8"><TR><TD BGCOLOR="#DAE8FC" ALIGN="CENTER"><B>inventory :9101</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">catalogo, stock, reservas</FONT></TD></TR></TABLE>>];
+"cli" [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#3B6EA8"><TR><TD BGCOLOR="#DAE8FC" ALIGN="CENTER"><B>clients :9102</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">perfil, datos personales</FONT></TD></TR></TABLE>>];
+"ord" [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#3B6EA8"><TR><TD BGCOLOR="#DAE8FC" ALIGN="CENTER"><B>orders :9103</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">pedidos, estados, expiracion</FONT></TD></TR></TABLE>>];
+"pay" [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#3B6EA8"><TR><TD BGCOLOR="#DAE8FC" ALIGN="CENTER"><B>payments :9104</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">pagos, webhook, idempotencia</FONT></TD></TR></TABLE>>];
+"ana" [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#4F8A3B"><TR><TD BGCOLOR="#D5E8D4" ALIGN="CENTER"><B>analytics :50051 (gRPC)</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">lectura de ventas, streaming</FONT></TD></TR></TABLE>>];
+"vault" [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3" COLOR="#C77700"><TR><TD BGCOLOR="#FFE6CC" ALIGN="CENTER"><B>Vault :8200</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="0"><FONT POINT-SIZE="9">KV v2 + politicas por servicio</FONT></TD></TR></TABLE>>];
+"db_auth" [shape=cylinder style=filled fillcolor="#F5F5F5" color="#666666" label="auth.db" fontsize=9];
+"db_inv" [shape=cylinder style=filled fillcolor="#F5F5F5" color="#666666" label="inventory.db" fontsize=9];
+"db_cli" [shape=cylinder style=filled fillcolor="#F5F5F5" color="#666666" label="clients.db" fontsize=9];
+"db_ord" [shape=cylinder style=filled fillcolor="#F5F5F5" color="#666666" label="orders.db" fontsize=9];
+"db_pay" [shape=cylinder style=filled fillcolor="#F5F5F5" color="#666666" label="payments.db" fontsize=9];
+"db_ana" [shape=cylinder style=filled fillcolor="#F5F5F5" color="#666666" label="analytics.db" fontsize=9];
+}
+"nav" -> "gw" [label="HTTPS (TLS en el borde)", arrowhead=normal];
+"prov" -> "gw" [label="POST /payments/webhook", arrowhead=normal];
+"gw" -> "auth" [label="introspect / login", arrowhead=normal];
+"gw" -> "inv" [label="REST", arrowhead=normal];
+"gw" -> "cli" [label="REST", arrowhead=normal];
+"gw" -> "ord" [label="REST", arrowhead=normal];
+"gw" -> "pay" [label="REST", arrowhead=normal];
+"gw" -> "gql" [label="POST /graphql", arrowhead=normal];
+"gql" -> "ord" [label="REST", arrowhead=normal];
+"gql" -> "inv" [label="REST (lotes)", arrowhead=normal];
+"gql" -> "cli" [label="REST (lotes)", arrowhead=normal];
+"gql" -> "pay" [label="REST (lotes)", arrowhead=normal];
+"gql" -> "ana" [label="gRPC", color="#4F8A3B", fontcolor="#4F8A3B", penwidth=2, arrowhead=normal];
+"ord" -> "inv" [label="reservar/liberar/confirmar", arrowhead=normal];
+"ord" -> "cli" [label="verificar cliente", arrowhead=normal];
+"pay" -> "ord" [label="consultar / pagado", arrowhead=normal];
+"ana" -> "ord" [label="export de pagados", arrowhead=normal];
+"auth" -> "cli" [label="crear perfil", arrowhead=normal];
+"auth" -> "db_auth" [arrowhead=none];
+"inv" -> "db_inv" [arrowhead=none];
+"cli" -> "db_cli" [arrowhead=none];
+"ord" -> "db_ord" [arrowhead=none];
+"pay" -> "db_pay" [arrowhead=none];
+"ana" -> "db_ana" [arrowhead=none];
+"gw" -> "vault" [style=dotted, color="#C77700", fontcolor="#C77700", arrowhead=vee, constraint=false];
+"gql" -> "vault" [style=dotted, color="#C77700", fontcolor="#C77700", arrowhead=vee, constraint=false];
+"inv" -> "vault" [style=dotted, color="#C77700", fontcolor="#C77700", arrowhead=vee, constraint=false];
+"cli" -> "vault" [style=dotted, color="#C77700", fontcolor="#C77700", arrowhead=vee, constraint=false];
+"ord" -> "vault" [style=dotted, color="#C77700", fontcolor="#C77700", arrowhead=vee, constraint=false];
+"pay" -> "vault" [style=dotted, color="#C77700", fontcolor="#C77700", arrowhead=vee, constraint=false];
+"ana" -> "vault" [style=dotted, color="#C77700", fontcolor="#C77700", arrowhead=vee, constraint=false];
+"auth" -> "vault" [style=dotted, color="#C77700", fontcolor="#C77700", arrowhead=vee, constraint=false];
+}

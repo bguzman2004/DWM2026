@@ -1,0 +1,14 @@
+sequenceDiagram
+    autonumber
+    actor M as Matias (customer)
+    participant G as API Gateway
+    participant A as Auth Service
+    participant O as orders
+    M->>G: GET /orders/ORD-123 (pedido de Camila)
+    G->>A: introspect(token de Matias)
+    A-->>G: user USR-002, roles customer, client CLI-002
+    G->>O: GET /orders/ORD-123 + identidad CLI-002
+    O->>O: client_id del pedido (CLI-001) distinto de CLI-002
+    O-->>G: 404 Orden no encontrada
+    G-->>M: 404 (no revela que existe)
+    Note over M,O: Sin cookie el gateway responde 401 antes de llamar a orders. Hacia orders directo sin secreto de arista: 403.

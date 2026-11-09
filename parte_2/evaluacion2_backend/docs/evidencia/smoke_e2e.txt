@@ -1,0 +1,19 @@
+OK    A sin sesion -> 401 
+OK    B login incorrecto -> 401 
+OK    C login camila -> 200 con cookie HttpOnly 
+OK    C catalogo -> 200 
+OK    D cliente no crea productos -> 403 
+OK    E orden creada con total calculado en servidor ORD-B059BD8B
+OK    E promocion 2x1 aplicada por el servidor 
+OK    F otro cliente no ve la orden -> 404 
+OK    G webhook firmado procesado 
+OK    G webhook duplicado ignorado 
+OK    G orden pagada una sola vez 
+OK    G firma invalida -> 401 
+OK    H cocina avanza la orden 
+OK    I GraphQL agrega ordenes+clientes+inventario+pagos 
+OK    J analitica gRPC via GraphQL (admin) {'orders': 1, 'revenue': 7000, 'topProducts': [{'name': 'Burrito Especial', 'units': 1}, {'name': 'Tacos al Pastor', 'units': 2}]}
+OK    J analitica denegada a cliente 
+OK    K logout revoca la sesion 
+
+17/17 verificaciones correctas

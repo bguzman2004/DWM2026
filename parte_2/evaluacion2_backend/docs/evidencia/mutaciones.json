@@ -1,0 +1,82 @@
+[
+  {
+    "mutante": "M1 orders deja de comprobar la propiedad del pedido",
+    "archivo": "services/orders/main.py",
+    "prueba": "test_propiedad_de_ordenes_entre_clientes",
+    "sin_mutar": "pasa",
+    "con_mutacion": "falla (detectado)",
+    "detalle": "1 failed in 2.40s"
+  },
+  {
+    "mutante": "M2 payments deja de deduplicar avisos por event_id",
+    "archivo": "services/payments/main.py",
+    "prueba": "test_webhook_duplicado_no_paga_dos_veces",
+    "sin_mutar": "pasa",
+    "con_mutacion": "falla (detectado)",
+    "detalle": "1 failed in 2.38s"
+  },
+  {
+    "mutante": "M3 inventory reserva sin comprobar disponibilidad",
+    "archivo": "services/inventory/main.py",
+    "prueba": "test_no_se_puede_vender_mas_de_lo_que_hay",
+    "sin_mutar": "pasa",
+    "con_mutacion": "falla (detectado)",
+    "detalle": "1 failed in 2.26s"
+  },
+  {
+    "mutante": "M4 el gateway abre POST /products a cualquier rol",
+    "archivo": "services/api_gateway/routes.py",
+    "prueba": "test_gateway_corta_antes_de_llamar_al_servicio",
+    "sin_mutar": "pasa",
+    "con_mutacion": "falla (detectado)",
+    "detalle": "1 failed in 2.16s"
+  },
+  {
+    "mutante": "M5 los servicios aceptan llamadores fuera de la topología",
+    "archivo": "common/security.py",
+    "prueba": "test_llamador_fuera_de_la_topologia_es_rechazado",
+    "sin_mutar": "pasa",
+    "con_mutacion": "falla (detectado)",
+    "detalle": "1 failed in 2.06s"
+  },
+  {
+    "mutante": "M6 orders acepta un monto de pago distinto del total",
+    "archivo": "services/orders/main.py",
+    "prueba": "test_orders_valida_el_monto_aunque_el_aviso_venga_de_payments",
+    "sin_mutar": "pasa",
+    "con_mutacion": "falla (detectado)",
+    "detalle": "1 failed in 2.27s"
+  },
+  {
+    "mutante": "M7 payments acepta cualquier firma del webhook",
+    "archivo": "services/payments/main.py",
+    "prueba": "test_firma_invalida_o_ausente",
+    "sin_mutar": "pasa",
+    "con_mutacion": "falla (detectado)",
+    "detalle": "1 failed in 2.37s"
+  },
+  {
+    "mutante": "M8 GraphQL sin límite de costo",
+    "archivo": "services/graphql_gateway/limits.py",
+    "prueba": "test_limite_de_costo_rechaza_consultas_abusivas",
+    "sin_mutar": "pasa",
+    "con_mutacion": "falla (detectado)",
+    "detalle": "1 failed in 2.16s"
+  },
+  {
+    "mutante": "M9 la promoción 2x1 deja de aplicarse en el servidor",
+    "archivo": "services/inventory/main.py",
+    "prueba": "test_p01_promocion_del_dia_se_aplica_en_el_servidor",
+    "sin_mutar": "pasa",
+    "con_mutacion": "falla (detectado)",
+    "detalle": "1 failed in 2.37s"
+  },
+  {
+    "mutante": "M10 el servidor deja de validar el teléfono",
+    "archivo": "common/validators.py",
+    "prueba": "test_p03_formulario_del_frontend_valida_contacto_en_el_servidor",
+    "sin_mutar": "pasa",
+    "con_mutacion": "falla (detectado)",
+    "detalle": "1 failed in 2.27s"
+  }
+]
