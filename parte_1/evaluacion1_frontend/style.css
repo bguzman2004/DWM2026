@@ -1,0 +1,743 @@
+:root {
+    --rojo-chile: #A3231F;
+    --crema: #F4E9DA;
+    --verde-palta: #4C6444;
+    --amarillo-mostaza: #E4A93B;
+    --carbon: #2B2B2B;
+    --error: #c0392b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #fffaf3;
+    color: var(--carbon);
+    line-height: 1.6;
+}
+
+h1, h2, h3, .logo {
+    font-family: 'Fraunces', serif;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ===== Navbar ===== */
+.bg-crema {
+    background-color: var(--crema) !important;
+    border-bottom: 3px solid var(--rojo-chile);
+}
+
+.logo {
+    color: var(--rojo-chile) !important;
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+.logo i {
+    color: var(--amarillo-mostaza);
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    color: var(--verde-palta);
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-btn.active,
+.nav-btn:hover {
+    background: var(--verde-palta);
+    color: white;
+}
+
+.social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    margin-left: 6px;
+    text-decoration: none;
+    background: white;
+    border: 1px solid var(--rojo-chile);
+    color: var(--rojo-chile);
+    border-radius: 50%;
+    transition: background 0.2s, color 0.2s;
+}
+
+.social-icons a:hover {
+    background: var(--rojo-chile);
+    color: white;
+}
+
+/* ===== Hero ===== */
+.hero {
+    background:
+        linear-gradient(rgba(20,15,10,0.55), rgba(20,15,10,0.4)),
+        url('img/hero-tacos.webp') center/cover no-repeat;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero h1 {
+    font-weight: 700;
+}
+
+.play-icon {
+    width: 60px;
+    height: 60px;
+    background: white;
+    color: var(--verde-palta);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.btn-primario {
+    background-color: var(--rojo-chile);
+    color: white;
+    border: none;
+    font-weight: 700;
+    border-radius: 8px;
+    transition: transform 0.15s, opacity 0.2s;
+}
+
+.btn-primario:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    color: white;
+}
+
+/* ===== Inicio: Hero + Pedido Rápido lado a lado (como el boceto) ===== */
+.inicio-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+}
+
+@media (max-width: 800px) {
+    .inicio-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pedido-rapido {
+    background-color: var(--rojo-chile);
+    padding: 32px 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pedido-rapido h2 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.pedido-rapido p {
+    font-size: 0.9rem;
+    opacity: 0.95;
+    margin-bottom: 14px;
+}
+
+.pedido-rapido textarea {
+    resize: none;
+}
+
+.btn-mostaza {
+    background-color: var(--amarillo-mostaza);
+    color: var(--carbon);
+    border: none;
+    font-weight: 700;
+    border-radius: 8px;
+}
+
+.btn-mostaza:hover {
+    opacity: 0.9;
+    color: var(--carbon);
+}
+
+/* ===== Foto destacada (franja bajo el hero) ===== */
+.foto-destacada {
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+.foto-destacada img {
+    width: 100%;
+    max-height: 340px;
+    object-fit: cover;
+    display: block;
+}
+
+.ad-banner {
+    background: linear-gradient(90deg, var(--amarillo-mostaza), #f2c169);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--carbon);
+}
+
+/* ===== Menú ===== */
+.vista h2 {
+    color: var(--rojo-chile);
+    margin: 25px 0 20px;
+}
+
+.menu-controles {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.buscador {
+    max-width: 400px;
+}
+
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.filtro-btn {
+    background: white;
+    border: 1px solid var(--verde-palta);
+    color: var(--verde-palta);
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+}
+
+.filtro-btn.active,
+.filtro-btn:hover {
+    background: var(--verde-palta);
+    color: white;
+}
+
+/* Tarjeta de platillo */
+.platillo-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.platillo-card:focus-visible {
+    outline: 3px solid var(--amarillo-mostaza);
+    outline-offset: 2px;
+}
+
+.platillo-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.platillo-imagen {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.2rem;
+    color: white;
+}
+
+.img-tacos    { background: linear-gradient(135deg, #A3231F, #d9564f); }
+.img-burritos { background: linear-gradient(135deg, #4C6444, #7c9c6b); }
+.img-nachos   { background: linear-gradient(135deg, #E4A93B, #f4cd80); }
+.img-bebidas  { background: linear-gradient(135deg, #2f6b6f, #6bb0b5); }
+.img-otros    { background: linear-gradient(135deg, #2B2B2B, #565656); }
+
+.platillo-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.categoria-tag {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--verde-palta);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.platillo-body h3 {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+}
+
+.platillo-descripcion {
+    font-size: 0.85rem;
+    color: #6b6b6b;
+    margin-bottom: 8px;
+}
+
+.platillo-precio {
+    font-weight: 700;
+    color: var(--rojo-chile);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.btn-agregar {
+    background: var(--verde-palta);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    margin-top: auto;
+    transition: opacity 0.2s;
+}
+
+.btn-agregar:hover {
+    opacity: 0.85;
+}
+
+.sin-resultados {
+    color: #999;
+}
+
+/* ===== Pedido ===== */
+.carrito-resumen {
+    background: var(--crema);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 20px;
+}
+
+.carrito-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.carrito-lista li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    font-size: 0.9rem;
+}
+
+.carrito-lista button.quitar {
+    background: var(--error);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3px 8px;
+    cursor: pointer;
+    font-size: 0.75rem;
+}
+
+.carrito-total {
+    text-align: right;
+    font-weight: 700;
+    margin-top: 10px;
+    font-size: 1.1rem;
+}
+
+fieldset {
+    border: 1px solid var(--verde-palta);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+legend {
+    font-weight: 700;
+    color: var(--verde-palta);
+    padding: 0 8px;
+    width: auto;
+}
+
+.campo {
+    margin-bottom: 14px;
+}
+
+.campo .form-control.input-error {
+    border-color: var(--error);
+    background-color: #fdecea;
+}
+
+.error {
+    display: block;
+    color: var(--error);
+    font-size: 0.8rem;
+    min-height: 1em;
+    margin-top: 4px;
+}
+
+.contador {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+    text-align: right;
+    margin-top: 4px;
+}
+
+/* ===== Confirmación ===== */
+.confirmacion {
+    background: white;
+    border-radius: 14px;
+    padding: 30px 25px;
+    border: 2px solid var(--verde-palta);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.confirmacion i.fa-circle-check {
+    color: var(--verde-palta);
+}
+
+.confirmacion h2 {
+    color: var(--verde-palta);
+}
+
+/* ===== Detalle Producto ===== */
+.btn-volver {
+    background: none;
+    border: none;
+    color: var(--verde-palta);
+    font-weight: 700;
+    padding: 8px 0;
+    margin: 16px 0;
+    cursor: pointer;
+}
+
+.btn-volver:hover {
+    text-decoration: underline;
+}
+
+.detalle-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.detalle-imagen {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    color: white;
+}
+
+.detalle-body {
+    padding: 24px;
+}
+
+.detalle-descripcion {
+    color: #6b6b6b;
+    margin-bottom: 10px;
+}
+
+.detalle-precio-unitario {
+    font-weight: 700;
+    color: var(--rojo-chile);
+}
+
+.detalle-cantidad {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 16px;
+    font-weight: 700;
+}
+
+.detalle-cantidad button {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--verde-palta);
+    background: white;
+    color: var(--verde-palta);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.detalle-cantidad button:hover {
+    background: var(--verde-palta);
+    color: white;
+}
+
+/* ===== Nosotros ===== */
+.nosotros-chef {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.nosotros-chef img {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid var(--amarillo-mostaza);
+    flex-shrink: 0;
+}
+
+.nosotros-chef div {
+    flex: 1;
+    min-width: 240px;
+}
+
+.mini-banner {
+    background: white;
+    border: 1px solid var(--rojo-chile);
+    border-radius: 12px;
+    padding: 22px 10px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--rojo-chile);
+}
+
+/* ===== Contacto ===== */
+.contacto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 700px) {
+    .contacto-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.contacto-info {
+    background: var(--crema);
+    border-radius: 14px;
+    padding: 22px;
+}
+
+.contacto-info p {
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.contacto-info i {
+    color: var(--rojo-chile);
+    width: 22px;
+}
+
+.contacto-mapa img {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* ===== Footer ===== */
+.footer {
+    background-color: var(--carbon);
+    color: white;
+    padding: 26px 0 16px;
+    font-size: 0.85rem;
+    margin-top: 30px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 700px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .footer-grid .social-icons {
+        justify-content: center;
+        display: flex;
+    }
+}
+
+.footer .logo {
+    color: var(--amarillo-mostaza) !important;
+}
+
+.footer hr {
+    border-color: rgba(255,255,255,0.15);
+}
+
+/* ===== Mejoras: promoción, carrito y avisos ===== */
+.btn-promo {
+    background: var(--rojo-chile);
+    color: white;
+    font-weight: 700;
+    border-radius: 20px;
+}
+
+.btn-promo:hover {
+    color: white;
+    opacity: 0.9;
+}
+
+.platillo-imagen {
+    position: relative;
+}
+
+.promo-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--amarillo-mostaza);
+    color: var(--carbon);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.promo-nota {
+    background: #fff4dc;
+    border-left: 4px solid var(--amarillo-mostaza);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.carrito-lista li {
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.linea-acciones {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cantidad-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--verde-palta);
+    background: white;
+    color: var(--verde-palta);
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.cantidad-btn:hover:not(:disabled),
+.detalle-cantidad button:hover:not(:disabled) {
+    background: var(--verde-palta);
+    color: white;
+}
+
+.cantidad-btn:disabled,
+.detalle-cantidad button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.cantidad-valor {
+    min-width: 20px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.carrito-totales {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.carrito-totales p {
+    margin-bottom: 2px;
+}
+
+.carrito-totales .descuento {
+    color: var(--verde-palta);
+    font-weight: 700;
+}
+
+.aviso {
+    background: #fdecea;
+    border: 1px solid var(--error);
+    color: var(--error);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.contacto-mapa iframe {
+    width: 100%;
+    min-height: 260px;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 14px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+:focus-visible {
+    outline: 3px solid var(--amarillo-mostaza);
+    outline-offset: 2px;
+}
+
+.vista .pedido-rapido h2 {
+    color: white;
+    margin: 0 0 10px;
+}
+
+.btn-primario,
+.btn-promo {
+    --bs-btn-color: white;
+    --bs-btn-bg: var(--rojo-chile);
+    --bs-btn-hover-color: white;
+    --bs-btn-hover-bg: var(--rojo-chile);
+    --bs-btn-active-color: white;
+    --bs-btn-active-bg: #8a1d1a;
+    --bs-btn-disabled-bg: var(--rojo-chile);
+}
+
+.btn-mostaza {
+    --bs-btn-color: var(--carbon);
+    --bs-btn-bg: var(--amarillo-mostaza);
+    --bs-btn-hover-color: var(--carbon);
+    --bs-btn-hover-bg: var(--amarillo-mostaza);
+    --bs-btn-active-color: var(--carbon);
+    --bs-btn-active-bg: #c98f26;
+}

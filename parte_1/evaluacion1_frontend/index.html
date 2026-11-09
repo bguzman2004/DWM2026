@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Mariachi - Comida Mexicana</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-light bg-crema shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand logo" href="#" data-vista="inicio">
+                <i class="fa-solid fa-pepper-hot"></i> El Mariachi
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menú de navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto align-items-md-center gap-2">
+                    <li class="nav-item"><button class="nav-btn active" data-vista="inicio">Inicio</button></li>
+                    <li class="nav-item"><button class="nav-btn" data-vista="menu">Menú</button></li>
+                    <li class="nav-item">
+                        <button class="nav-btn" data-vista="pedido">
+                            <i class="fa-solid fa-cart-shopping"></i> Pedido
+                            <span id="carritoContador" class="badge rounded-pill text-bg-danger">0</span>
+                        </button>
+                    </li>
+                    <li class="nav-item"><button class="nav-btn" data-vista="nosotros">Nosotros</button></li>
+                    <li class="nav-item"><button class="nav-btn" data-vista="contacto">Contacto</button></li>
+                </ul>
+                <div class="social-icons ms-md-3 mt-2 mt-md-0">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://wa.me/56900000000" aria-label="WhatsApp" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+
+        <!-- VISTA: INICIO -->
+        <section id="vista-inicio" class="vista">
+            <div class="container-fluid inicio-grid">
+                <div class="hero text-center text-white">
+                    <div class="py-5 px-3">
+                        <div class="play-icon mx-auto mb-3">
+                            <i class="fa-solid fa-play"></i>
+                        </div>
+                        <h1>Auténtica comida mexicana</h1>
+                        <p class="lead">Tacos, burritos y nachos preparados como en casa.</p>
+                        <button class="btn btn-primario btn-lg mt-2" id="btnVerMenu">
+                            Ver Menú <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pedido Rápido: cotización directa, sin navegar el menú completo -->
+                <div class="pedido-rapido text-white">
+                    <h2><i class="fa-solid fa-comments"></i> Pedido Rápido</h2>
+                    <p>¿Ya sabes qué quieres? Cuéntanos y te cotizamos al tiro por WhatsApp, sin pasar por el menú.</p>
+                    <form id="formPedidoRapido">
+                        <label for="mensajeRapido" class="visually-hidden">Tu pedido rápido</label>
+                        <textarea id="mensajeRapido" class="form-control" rows="3" maxlength="300"
+                            placeholder="Ej: 4 tacos al pastor y 2 aguas de horchata, para retiro" required></textarea>
+                        <button type="submit" class="btn btn-mostaza w-100 mt-2">
+                            Enviar cotización <i class="fa-brands fa-whatsapp"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="container mt-4">
+                <div class="foto-destacada mb-4">
+                    <img src="img/mesa-mexicana.jpg" alt="Mesa mexicana con burritos, nachos, guacamole y pico de gallo" loading="lazy">
+                </div>
+
+                <div class="ad-banner" id="promoDelDia">
+                    <i class="fa-solid fa-fire"></i> PROMOCIÓN DEL DÍA: 2x1 en Tacos al Pastor
+                    <button type="button" class="btn btn-sm btn-promo ms-2" id="btnVerPromo">Pedir ahora</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA: DETALLE PRODUCTO (Menú -> Detalle -> Carrito) -->
+        <section id="vista-detalle" class="vista hidden">
+            <div class="container" style="max-width:650px;">
+                <button type="button" class="btn-volver" id="btnVolverAlMenu">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al menú
+                </button>
+
+                <div class="detalle-card">
+                    <div id="detalleImagen" class="detalle-imagen"></div>
+                    <div class="detalle-body">
+                        <span class="categoria-tag" id="detalleCategoria"></span>
+                        <h2 id="detalleNombre"></h2>
+                        <p class="detalle-descripcion" id="detalleDescripcion"></p>
+                        <p class="detalle-precio-unitario" id="detallePrecioUnitario"></p>
+                        <p class="promo-nota hidden" id="detallePromo"></p>
+
+                        <div class="detalle-cantidad">
+                            <span>Cantidad:</span>
+                            <button type="button" id="detalleMenos" aria-label="Restar">−</button>
+                            <span id="detalleCantidad">1</span>
+                            <button type="button" id="detalleMas" aria-label="Sumar">+</button>
+                        </div>
+
+                        <button type="button" class="btn btn-primario btn-lg w-100 mt-3" id="btnAgregarDesdeDetalle">
+                            Agregar <span id="detalleSubtotal"></span> al carrito <i class="fa-solid fa-cart-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA: MENÚ -->
+        <section id="vista-menu" class="vista hidden">
+            <div class="container">
+                <h2 class="text-center">Nuestro Menú</h2>
+
+                <div class="menu-controles">
+                    <div class="input-group buscador">
+                        <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="search" id="buscarPlatillo" class="form-control" placeholder="Buscar platillo...">
+                    </div>
+
+                    <div class="filtros" id="filtrosCategoria">
+                        <button class="filtro-btn active" data-cat="Todos">Todos</button>
+                        <button class="filtro-btn" data-cat="Tacos">Tacos</button>
+                        <button class="filtro-btn" data-cat="Burritos">Burritos</button>
+                        <button class="filtro-btn" data-cat="Nachos">Nachos</button>
+                        <button class="filtro-btn" data-cat="Bebidas">Bebidas</button>
+                        <button class="filtro-btn" data-cat="Otros">Otros</button>
+                    </div>
+                </div>
+
+                <div id="listaMenu" class="row g-4 mt-1"></div>
+                <p id="sinResultados" class="sin-resultados hidden text-center py-4">
+                    <i class="fa-solid fa-circle-exclamation"></i> No se encontraron platillos.
+                </p>
+            </div>
+        </section>
+
+        <!-- VISTA: PEDIDO -->
+        <section id="vista-pedido" class="vista hidden">
+            <div class="container" style="max-width:700px;">
+                <h2 class="text-center">Tu Pedido</h2>
+
+                <article id="carritoResumen" class="carrito-resumen">
+                    <p id="carritoVacioMsg"><i class="fa-solid fa-basket-shopping"></i> Aún no has agregado platillos. Ve al Menú y agrega alguno.</p>
+                    <ul id="carritoLista" class="carrito-lista"></ul>
+                    <div class="carrito-totales">
+                        <p>Subtotal: <span id="carritoSubtotal">$0</span></p>
+                        <p class="descuento hidden" id="carritoDescuentoFila">Promoción 2x1: <span id="carritoDescuento">-$0</span></p>
+                        <p class="carrito-total">Total: <span id="carritoTotal">$0</span></p>
+                    </div>
+                </article>
+
+                <div id="avisoCarrito" class="aviso hidden" role="alert"></div>
+
+                <form id="formPedido" novalidate>
+                    <fieldset>
+                        <legend>Datos de contacto</legend>
+
+                        <div class="campo">
+                            <label for="nombreCliente" class="form-label">Nombre completo *</label>
+                            <input type="text" id="nombreCliente" name="nombreCliente" class="form-control" placeholder="Ej: Benjamín Guzmán">
+                            <span class="error" id="errorNombre"></span>
+                        </div>
+
+                        <div class="campo">
+                            <label for="telefonoCliente" class="form-label">Teléfono *</label>
+                            <input type="tel" id="telefonoCliente" name="telefonoCliente" class="form-control" placeholder="Ej: 912345678">
+                            <span class="error" id="errorTelefono"></span>
+                        </div>
+
+                        <div class="campo">
+                            <label for="emailCliente" class="form-label">Email (opcional)</label>
+                            <input type="email" id="emailCliente" name="emailCliente" class="form-control" placeholder="Ej: correo@ejemplo.com">
+                            <span class="error" id="errorEmail"></span>
+                        </div>
+
+                        <div class="campo">
+                            <label for="notasCliente" class="form-label">Notas para tu pedido</label>
+                            <textarea id="notasCliente" name="notasCliente" class="form-control" maxlength="200" rows="3" placeholder="Ej: sin cebolla, agregar más salsa..."></textarea>
+                            <span class="contador" id="contadorNotas">0/200</span>
+                        </div>
+                    </fieldset>
+
+                    <button type="submit" class="btn btn-primario btn-lg w-100">
+                        Confirmar Pedido <i class="fa-solid fa-check"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- VISTA: CONFIRMACIÓN -->
+        <section id="vista-confirmacion" class="vista hidden">
+            <div class="container" style="max-width:600px;">
+                <div class="confirmacion text-center">
+                    <i class="fa-solid fa-circle-check fa-3x mb-2"></i>
+                    <h2>¡Pedido Confirmado!</h2>
+                    <p>Número de orden: <strong id="confNumero"></strong></p>
+                    <p>Fecha: <span id="confFecha"></span></p>
+                    <p>Cliente: <span id="confCliente"></span></p>
+                    <p>Teléfono: <span id="confTelefono"></span></p>
+
+                    <p class="hidden" id="confNotasFila">Notas: <span id="confNotas"></span></p>
+
+                    <ul id="confItems" class="carrito-lista text-start"></ul>
+                    <div class="carrito-totales">
+                        <p>Subtotal: <span id="confSubtotal"></span></p>
+                        <p class="descuento hidden" id="confDescuentoFila">Promoción 2x1: <span id="confDescuento"></span></p>
+                        <p class="carrito-total">Total: <span id="confTotal"></span></p>
+                    </div>
+
+                    <button type="button" class="btn btn-primario mt-2" id="btnNuevoPedido">Hacer otro pedido</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA: NOSOTROS -->
+        <section id="vista-nosotros" class="vista hidden">
+            <div class="container" style="max-width:750px;">
+                <h2 class="text-center">Nosotros</h2>
+
+                <div class="nosotros-chef">
+                    <img src="https://www.w3schools.com/w3images/chef.jpg" alt="Nuestro chef preparando platillos" loading="lazy">
+                    <div>
+                        <p>En El Mariachi llevamos la auténtica cocina mexicana a tu mesa: tacos, burritos y nachos preparados con recetas tradicionales, ingredientes frescos y mucho cariño.</p>
+                        <p>Fundado por un equipo apasionado por la comida mexicana real, buscamos que cada visita se sienta como una fiesta.</p>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-3">
+                    <div class="col-6">
+                        <div class="mini-banner"><i class="fa-brands fa-instagram fa-lg"></i><br>SÍGUENOS EN INSTAGRAM</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mini-banner"><i class="fa-brands fa-google fa-lg"></i><br>RESEÑAS EN GOOGLE</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA: CONTACTO -->
+        <section id="vista-contacto" class="vista hidden">
+            <div class="container" style="max-width:900px;">
+                <h2 class="text-center">Contacto</h2>
+                <div class="contacto-grid">
+                    <div class="contacto-info">
+                        <p><i class="fa-solid fa-location-dot"></i> Av. Ejemplo 123, Santiago</p>
+                        <p><i class="fa-solid fa-phone"></i> +56 9 0000 0000</p>
+                        <p><i class="fa-solid fa-envelope"></i> contacto@elmariachi.cl</p>
+                        <p><i class="fa-solid fa-clock"></i> Mar–Dom, 12:00–22:00 (lunes cerrado)</p>
+                        <a href="https://wa.me/56900000000" class="btn btn-primario mt-2" target="_blank" rel="noopener">
+                            <i class="fa-brands fa-whatsapp"></i> Escríbenos por WhatsApp
+                        </a>
+                    </div>
+                    <div class="contacto-mapa">
+                        <iframe title="Mapa de El Mariachi en Santiago" loading="lazy"
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=-70.6650%2C-33.4450%2C-70.6350%2C-33.4300&amp;layer=mapnik&amp;marker=-33.4378%2C-70.6505"></iframe>
+                        <a class="small" href="https://www.openstreetmap.org/?mlat=-33.4378&amp;mlon=-70.6505#map=16/-33.4378/-70.6505" target="_blank" rel="noopener">Ver mapa más grande</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo h5"><i class="fa-solid fa-pepper-hot"></i> El Mariachi</div>
+                    <p class="small mb-0">Comida mexicana casera, hecha al momento.</p>
+                </div>
+                <div>
+                    <p class="small mb-1"><i class="fa-solid fa-location-dot"></i> Av. Ejemplo 123, Santiago</p>
+                    <p class="small mb-1"><i class="fa-solid fa-phone"></i> +56 9 0000 0000</p>
+                    <p class="small mb-0"><i class="fa-solid fa-clock"></i> Mar–Dom, 12:00–22:00</p>
+                </div>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://wa.me/56900000000" aria-label="WhatsApp" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <hr>
+            <p class="text-center small mb-0">&copy; 2026 El Mariachi - Comida Mexicana</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

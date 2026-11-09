@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package mariachi.analytics.v1;
+
+service Analytics {
+  rpc Health(Empty) returns (HealthReply);
+  rpc Sync(Empty) returns (SyncReply);
+  rpc SalesSummary(SummaryRequest) returns (SummaryReply);
+  rpc StreamSales(StreamRequest) returns (stream SalesBatch);
+}
+
+message Empty {}
+
+message HealthReply {
+  string status = 1;
+}
+
+message SyncReply {
+  int64 imported = 1;
+}
+
+message SummaryRequest {
+  int32 days = 1;
+  int32 top = 2;
+}
+
+message ProductTotal {
+  int32 product_id = 1;
+  string name = 2;
+  int64 units = 3;
+  int64 revenue = 4;
+}
+
+message SummaryReply {
+  int64 orders = 1;
+  int64 revenue = 2;
+  repeated ProductTotal top_products = 3;
+}
+
+message StreamRequest {
+  int64 after_id = 1;
+  int32 limit = 2;
+}
+
+message SalesBatch {
+  repeated SaleFact facts = 1;
+  int64 last_id = 2;
+}
+
+message SaleFact {
+  int64 id = 1;
+  string order_id = 2;
+  int32 product_id = 3;
+  int32 qty = 4;
+  int64 amount = 5;
+  string at = 6;
+}

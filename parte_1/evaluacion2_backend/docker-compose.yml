@@ -1,0 +1,190 @@
+x-service: &service
+  build: .
+  restart: unless-stopped
+  networks: [private]
+  environment: &env
+    VAULT_ADDR: http://vault:8200
+    SEED: "1"
+    DEMO_PASSWORD: ${DEMO_PASSWORD:?defina DEMO_PASSWORD en .env}
+    COOKIE_SECURE: ${COOKIE_SECURE:-0}
+    URL_AUTH: http://auth:8100
+    URL_INVENTORY: http://inventory:9101
+    URL_CLIENTS: http://clients:9102
+    URL_ORDERS: http://orders:9103
+    URL_PAYMENTS: http://payments:9104
+    URL_GRAPHQL_GATEWAY: http://graphql-gateway:9200
+    ANALYTICS_ADDR: analytics:50051
+    VAULT_TOKEN_FILE: /run/vault/token
+  depends_on:
+    vault-bootstrap:
+      condition: service_completed_successfully
+
+services:
+  vault:
+    image: hashicorp/vault:1.17
+    cap_add: [IPC_LOCK]
+    networks: [private]
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_ROOT_TOKEN:?defina VAULT_ROOT_TOKEN en .env}
+      VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
+      VAULT_ADDR: http://127.0.0.1:8200
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  vault-bootstrap:
+    build: .
+    networks: [private]
+    command: ["python", "scripts/vault_bootstrap.py", "--token-dir", "/tokens"]
+    environment:
+      VAULT_ADDR: http://vault:8200
+      VAULT_ROOT_TOKEN: ${VAULT_ROOT_TOKEN:?defina VAULT_ROOT_TOKEN en .env}
+    user: root
+    volumes:
+      - tok_auth:/tokens/auth
+      - tok_inventory:/tokens/inventory
+      - tok_clients:/tokens/clients
+      - tok_orders:/tokens/orders
+      - tok_payments:/tokens/payments
+      - tok_graphql:/tokens/graphql-gateway
+      - tok_analytics:/tokens/analytics
+      - tok_gateway:/tokens/api-gateway
+    depends_on:
+      vault:
+        condition: service_healthy
+    restart: "no"
+
+  auth:
+    <<: *service
+    command: ["uvicorn", "services.auth.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8100"]
+    environment:
+      <<: *env
+      DB_PATH: /data/auth.db
+    volumes: [data_auth:/data, "tok_auth:/run/vault:ro"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8100/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  inventory:
+    <<: *service
+    command: ["uvicorn", "services.inventory.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "9101"]
+    environment:
+      <<: *env
+      DB_PATH: /data/inventory.db
+    volumes: [data_inventory:/data, "tok_inventory:/run/vault:ro"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:9101/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  clients:
+    <<: *service
+    command: ["uvicorn", "services.clients.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "9102"]
+    environment:
+      <<: *env
+      DB_PATH: /data/clients.db
+    volumes: [data_clients:/data, "tok_clients:/run/vault:ro"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:9102/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  orders:
+    <<: *service
+    command: ["uvicorn", "services.orders.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "9103"]
+    environment:
+      <<: *env
+      DB_PATH: /data/orders.db
+    volumes: [data_orders:/data, "tok_orders:/run/vault:ro"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:9103/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  payments:
+    <<: *service
+    command: ["uvicorn", "services.payments.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "9104"]
+    environment:
+      <<: *env
+      DB_PATH: /data/payments.db
+    volumes: [data_payments:/data, "tok_payments:/run/vault:ro"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:9104/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  analytics:
+    <<: *service
+    command: ["python", "-m", "services.analytics.server"]
+    environment:
+      <<: *env
+      DB_PATH: /data/analytics.db
+      GRPC_PORT: "50051"
+      ANALYTICS_SYNC_INTERVAL: "60"
+    volumes: [data_analytics:/data, "tok_analytics:/run/vault:ro"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import grpc; from services.analytics import analytics_pb2 as pb, analytics_pb2_grpc as r; r.AnalyticsStub(grpc.insecure_channel('127.0.0.1:50051')).Health(pb.Empty(), timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  graphql-gateway:
+    <<: *service
+    command: ["uvicorn", "services.graphql_gateway.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "9200"]
+    volumes: ["tok_graphql:/run/vault:ro"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:9200/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api-gateway:
+    <<: *service
+    command: ["uvicorn", "services.api_gateway.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
+    networks: [private, public]
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes: ["tok_gateway:/run/vault:ro"]
+    depends_on:
+      vault-bootstrap:
+        condition: service_completed_successfully
+      auth: {condition: service_healthy}
+      inventory: {condition: service_healthy}
+      clients: {condition: service_healthy}
+      orders: {condition: service_healthy}
+      payments: {condition: service_healthy}
+      graphql-gateway: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+networks:
+  private:
+    internal: true
+  public: {}
+
+volumes:
+  data_auth:
+  data_inventory:
+  data_clients:
+  data_orders:
+  data_payments:
+  data_analytics:
+  tok_auth:
+  tok_inventory:
+  tok_clients:
+  tok_orders:
+  tok_payments:
+  tok_graphql:
+  tok_analytics:
+  tok_gateway:

@@ -1,0 +1,102 @@
+{
+  "rows": 100000,
+  "page": 2000,
+  "topology": "servidores en un proceso aparte, cliente en otro; loopback",
+  "export": {
+    "rest": {
+      "rows": 100000,
+      "bytes": 11514457,
+      "seconds_median": 1.367,
+      "rows_per_second": 73154,
+      "server_cpu_seconds_median": 1.13
+    },
+    "grpc": {
+      "rows": 100000,
+      "bytes": 5983932,
+      "seconds_median": 0.414,
+      "rows_per_second": 241310,
+      "server_cpu_seconds_median": 0.36
+    },
+    "bytes_ratio_grpc_vs_rest": 0.52,
+    "speedup_grpc_vs_rest": 3.3
+  },
+  "summary": {
+    "rest": [
+      {
+        "workers": 1,
+        "requests": 20,
+        "rps": 14.0,
+        "p50_ms": 71.8,
+        "p95_ms": 79.9
+      },
+      {
+        "workers": 8,
+        "requests": 160,
+        "rps": 26.0,
+        "p50_ms": 279.1,
+        "p95_ms": 470.5
+      },
+      {
+        "workers": 32,
+        "requests": 640,
+        "rps": 23.8,
+        "p50_ms": 1300.7,
+        "p95_ms": 1826.5
+      }
+    ],
+    "grpc": [
+      {
+        "workers": 1,
+        "requests": 20,
+        "rps": 15.3,
+        "p50_ms": 63.6,
+        "p95_ms": 80.2
+      },
+      {
+        "workers": 8,
+        "requests": 160,
+        "rps": 26.6,
+        "p50_ms": 286.1,
+        "p95_ms": 427.4
+      },
+      {
+        "workers": 32,
+        "requests": 640,
+        "rps": 23.5,
+        "p50_ms": 1336.2,
+        "p95_ms": 1671.5
+      }
+    ]
+  },
+  "server_rss_mb_max": 81,
+  "environment": {
+    "cpus": 2,
+    "ram_mb": 8418,
+    "python": "3.13.18",
+    "grpcio": "1.85.1"
+  },
+  "crud_products_via_gateway": [
+    {
+      "workers": 1,
+      "requests": 15,
+      "rps": 53.3,
+      "p50_ms": 17.3,
+      "p95_ms": 36.1
+    },
+    {
+      "workers": 8,
+      "requests": 120,
+      "rps": 49.5,
+      "p50_ms": 156.5,
+      "p95_ms": 221.0
+    },
+    {
+      "workers": 32,
+      "requests": 480,
+      "rps": 45.9,
+      "p50_ms": 616.7,
+      "p95_ms": 1165.9
+    }
+  ],
+  "crud_topology": "stack completo en un solo proceso (limite del banco de pruebas)"
+}
